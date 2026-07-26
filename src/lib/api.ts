@@ -4,7 +4,7 @@
 import type { Address, Category, Order, Product } from "./types";
 
 const RAW_API_URL =
-  (import.meta.env.VITE_API_BASE_URL as string | undefined) || "http://localhost:5000";
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) || "https://namankartbackend.onrender.com";
 
 /** Single Source of Truth for API version prefix */
 export const API_BASE_URL = RAW_API_URL.replace(/\/+$/, "").endsWith("/api/v1")
