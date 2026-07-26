@@ -1,0 +1,231 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * NamanKart 10/10 Luxury Editorial Devotional Design System
+ * 90% Ivory Cotton Paper (#FFFDF7 / #FAF7F2), 8% Bhagwa Saffron (#C96A13), 2% Temple Gold (#C9A227).
+ * Timeless Editorial Typography: Cinzel / Cormorant Garamond headings + Inter body.
+ */
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-saffron: var(--saffron);
+  --color-saffron-foreground: var(--saffron-foreground);
+  --color-maroon: var(--maroon);
+  --color-maroon-foreground: var(--maroon-foreground);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-cream: var(--cream);
+  --font-display: var(--font-display);
+  --font-sans: var(--font-sans);
+}
+
+:root {
+  --radius: 1rem;
+  --font-display: "Cinzel", "Cormorant Garamond", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+
+  /* 90% Handcrafted Cotton Paper Base & Sandalwood Ink */
+  --background: #faf7f2; /* Warm White Paper #FAF7F2 */
+  --foreground: #2d1f12; /* Sandalwood Ink #2D1F12 */
+  --card: #fffdf7; /* Ivory Cotton Paper #FFFDF7 */
+  --card-foreground: #2d1f12;
+  --popover: #fffdf7;
+  --popover-foreground: #2d1f12;
+
+  /* 8% Restrained Editorial Bhagwa (#C96A13) Accent */
+  --primary: #c96a13;
+  --primary-foreground: #fffdf7;
+  --saffron: #d97706; /* Secondary Saffron #D97706 */
+  --saffron-foreground: #fffdf7;
+
+  /* Secondary Sandalwood (#5A4633) */
+  --secondary: #5a4633;
+  --secondary-foreground: #faf7f2;
+  --maroon: #5a4633;
+  --maroon-foreground: #faf7f2;
+
+  /* 2% Temple Gold (#C9A227) Delicate Highlights */
+  --accent: #c9a227;
+  --accent-foreground: #2d1f12;
+  --gold: #c9a227;
+  --gold-foreground: #2d1f12;
+
+  --cream: #fff8e8; /* Cream #FFF8E8 */
+
+  --muted: #f5efe4; /* Warm Beige #F5EFE4 */
+  --muted-foreground: #8a6a55; /* Muted Text #8A6A55 */
+  --destructive: #b3261e; /* Error Red #B3261E */
+  --destructive-foreground: #fffdf7;
+  --border: #e8ded1; /* Delicate Paper Border #E8DED1 */
+  --input: #e8ded1;
+  --ring: #c96a13;
+
+  --chart-1: #c96a13;
+  --chart-2: #c9a227;
+  --chart-3: #5a4633;
+  --chart-4: #d97706;
+  --chart-5: #8a6a55;
+  --sidebar: #fff8e8;
+  --sidebar-foreground: #2d1f12;
+  --sidebar-primary: #c96a13;
+  --sidebar-primary-foreground: #fffdf7;
+  --sidebar-accent: #f5efe4;
+  --sidebar-accent-foreground: #2d1f12;
+  --sidebar-border: #e8ded1;
+  --sidebar-ring: #c96a13;
+}
+
+.dark {
+  --background: #faf7f2;
+  --foreground: #2d1f12;
+  --card: #fffdf7;
+  --card-foreground: #2d1f12;
+  --popover: #fffdf7;
+  --popover-foreground: #2d1f12;
+  --primary: #c96a13;
+  --primary-foreground: #fffdf7;
+  --secondary: #5a4633;
+  --secondary-foreground: #faf7f2;
+  --muted: #f5efe4;
+  --muted-foreground: #8a6a55;
+  --accent: #c9a227;
+  --accent-foreground: #2d1f12;
+  --destructive: #b3261e;
+  --destructive-foreground: #fffdf7;
+  --border: #e8ded1;
+  --input: #e8ded1;
+  --ring: #c96a13;
+  --sidebar: #fff8e8;
+  --sidebar-foreground: #2d1f12;
+  --sidebar-primary: #c96a13;
+  --sidebar-primary-foreground: #fffdf7;
+  --sidebar-accent: #f5efe4;
+  --sidebar-accent-foreground: #2d1f12;
+  --sidebar-border: #e8ded1;
+  --sidebar-ring: #c96a13;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    /* Subtle handmade cotton paper grain texture */
+    background-image:
+      radial-gradient(rgba(201, 162, 39, 0.02) 1px, transparent 0),
+      linear-gradient(to bottom, rgba(255, 253, 247, 0.5), rgba(250, 247, 242, 0.9));
+    background-size:
+      32px 32px,
+      100% 100%;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-display);
+    letter-spacing: -0.015em;
+    line-height: 1.2;
+  }
+}
+
+/* Subtle Hero Radial Lighting & Vignette */
+@utility hero-vignette {
+  background: radial-gradient(
+    circle at 50% 30%,
+    rgba(201, 162, 39, 0.04) 0%,
+    rgba(250, 247, 242, 1) 75%
+  );
+}
+
+/* Low-opacity decorative lotus & mandala dividers (< 3% opacity) */
+@utility om-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  color: #c9a227;
+
+  &::before,
+  &::after {
+    content: "";
+    height: 1px;
+    flex: 1;
+    background: linear-gradient(to right, transparent, rgba(201, 162, 39, 0.35), transparent);
+  }
+}
+
+/* Refined Catalogue Card with Soft Paper Elevation & 250ms Lift */
+@utility catalogue-card {
+  background: #fffdf7;
+  border: 1px solid #e8ded1;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 20px rgba(45, 31, 18, 0.03);
+  transition:
+    transform 250ms cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 250ms cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 250ms ease;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(45, 31, 18, 0.06);
+    border-color: rgba(201, 106, 19, 0.35);
+  }
+}
+
+@utility container-page {
+  width: 100%;
+  max-width: 84rem;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
