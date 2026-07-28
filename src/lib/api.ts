@@ -14,9 +14,11 @@ export const API_BASE_URL = RAW_API_URL.replace(/\/+$/, "").endsWith("/api/v1")
 async function fetchApi<T>(endpoint: string, options?: RequestInit): Promise<T> {
   const cleanEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
   const url = `${API_BASE_URL}${cleanEndpoint}`;
+  const token = typeof window !== "undefined" ? localStorage.getItem("nk_user_token") : null;
   const res = await fetch(url, {
     headers: {
       "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...options?.headers,
     },
     ...options,

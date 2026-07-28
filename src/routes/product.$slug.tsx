@@ -262,42 +262,103 @@ function ProductPage() {
           ))}
         </div>
         <div className="py-6 text-sm leading-relaxed">
-          {tab === "details" && <p>{product.description}</p>}
+          {tab === "details" && <p>{product.description || product.shortDescription}</p>}
           {tab === "specs" && (
-            <ul className="space-y-1">
-              <li>
-                <b>Category:</b> {catName}
-              </li>
-              <li>
-                <b>Material:</b> Authentic temple-sourced
-              </li>
-              <li>
-                <b>Origin:</b> India
-              </li>
-              {product.variants && (
+            <div className="space-y-3">
+              <ul className="space-y-1">
                 <li>
-                  <b>Variants:</b> {product.variants.length}
+                  <b>Category:</b> {catName}
                 </li>
+                {product.material && (
+                  <li>
+                    <b>Material:</b> {product.material}
+                  </li>
+                )}
+                {product.beadCount && (
+                  <li>
+                    <b>Bead Count:</b> {product.beadCount}
+                  </li>
+                )}
+                {product.finish && (
+                  <li>
+                    <b>Finish:</b> {product.finish}
+                  </li>
+                )}
+                {product.craftsmanship && (
+                  <li>
+                    <b>Craftsmanship:</b> {product.craftsmanship}
+                  </li>
+                )}
+                <li>
+                  <b>Country of Origin:</b> {product.countryOfOrigin || "India"}
+                </li>
+              </ul>
+
+              {Array.isArray(product.specificationsTable) && product.specificationsTable.length > 0 && (
+                <div className="mt-4 border border-border rounded-lg overflow-hidden">
+                  <table className="w-full text-xs text-left">
+                    <thead className="bg-cream border-b border-border">
+                      <tr>
+                        <th className="p-2 font-bold">Specification</th>
+                        <th className="p-2 font-bold">Details</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {product.specificationsTable.map((row: any, i: number) => (
+                        <tr key={i} className="border-b border-border/50">
+                          <td className="p-2 font-medium">{row.key || row.attribute || `Spec ${i+1}`}</td>
+                          <td className="p-2 text-muted-foreground">{row.value || row.detail || String(row)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
               )}
-            </ul>
+            </div>
           )}
           {tab === "shipping" && (
-            <div className="space-y-2">
-              <p>• Free shipping on orders above ₹999. Flat ₹79 below.</p>
-              <p>• Dispatch within 24-48 hours of order confirmation.</p>
-              <p>• 7-day easy returns for unopened items.</p>
-              <p>• COD available across India.</p>
+            <div className="space-y-3">
+              <p className="font-medium text-maroon">{product.shippingDescription || "Standard PAN India Shipping & Delivery Policy"}</p>
+              {Array.isArray(product.shippingPoints) && product.shippingPoints.length > 0 ? (
+                <ul className="space-y-1 text-xs">
+                  {product.shippingPoints.map((pt: string, i: number) => (
+                    <li key={i}>• {pt}</li>
+                  ))}
+                </ul>
+              ) : (
+                <div className="space-y-1 text-xs text-muted-foreground">
+                  <p>• Free shipping on orders above ₹999. Flat ₹79 below.</p>
+                  <p>• Dispatch within 24-48 hours of order confirmation.</p>
+                  <p>• 7-day easy returns for unopened items.</p>
+                  <p>• COD available across India.</p>
+                </div>
+              )}
             </div>
           )}
           {tab === "reviews" && (
             <div className="space-y-4">
+              {product.reviewHeading && (
+                <h4 className="font-semibold text-base text-maroon">{product.reviewHeading}</h4>
+              )}
+              {product.reviewDescription && (
+                <p className="text-xs text-muted-foreground">{product.reviewDescription}</p>
+              )}
+              {Array.isArray(product.reviewHighlights) && product.reviewHighlights.length > 0 && (
+                <div className="flex flex-wrap gap-2 my-2">
+                  {product.reviewHighlights.map((hl: string, i: number) => (
+                    <span key={i} className="px-2 py-1 bg-cream text-saffron font-medium text-xs rounded-full border border-saffron/20">
+                      ✓ {hl}
+                    </span>
+                  ))}
+                </div>
+              )}
               {[1, 2, 3].map((i) => (
-                <div key={i} className="border border-border rounded-md p-4">
+                <div key={i} className="border border-border rounded-md p-4 bg-cream/30">
                   <div className="text-gold text-sm">★★★★★</div>
                   <p className="text-sm mt-1">
-                    "Beautiful product, exactly as described. Shipped quickly."
+                    "Authentic item, temple-sourced quality verified upon arrival. Shipped securely with care."
                   </p>
-                  <p className="text-xs text-muted-foreground mt-1">— Verified Buyer</p>
+                  <p className="text-xs text-muted-foreground mt-1">— Verified Devotee</p>
                 </div>
               ))}
             </div>
