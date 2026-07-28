@@ -60,21 +60,21 @@ function ShopPage() {
 
   return (
     <div className="container-page py-8">
-      <h1 className="font-display text-3xl text-maroon">Shop All Products</h1>
-      <p className="text-sm text-muted-foreground">{filtered.length} products</p>
+      <h1 className="font-display text-3xl font-bold text-gray-900">Shop All Products</h1>
+      <p className="text-sm text-gray-500">{filtered.length} products</p>
 
       <div className="mt-6 grid md:grid-cols-[240px_1fr] gap-6">
         {/* Filters */}
-        <aside className="space-y-6">
+        <aside className="space-y-6 bg-white p-5 rounded-xl border border-border shadow-xs">
           <div>
-            <h3 className="font-semibold text-sm mb-2">Category</h3>
-            <ul className="space-y-1 text-sm">
+            <h3 className="font-semibold text-sm mb-3 text-gray-900 border-b border-border pb-2">Category</h3>
+            <ul className="space-y-1.5 text-sm">
               <li>
                 <button
                   onClick={() =>
                     navigate({ search: (p: ShopSearch) => ({ ...p, cat: undefined }) })
                   }
-                  className={"hover:text-saffron " + (!cat ? "text-saffron font-medium" : "")}
+                  className={"hover:text-saffron transition " + (!cat ? "text-saffron font-semibold" : "text-gray-700")}
                 >
                   All categories
                 </button>
@@ -84,7 +84,7 @@ function ShopPage() {
                   <button
                     onClick={() => navigate({ search: (p: ShopSearch) => ({ ...p, cat: c.slug }) })}
                     className={
-                      "hover:text-saffron " + (cat === c.slug ? "text-saffron font-medium" : "")
+                      "hover:text-saffron transition " + (cat === c.slug ? "text-saffron font-semibold" : "text-gray-700")
                     }
                   >
                     {c.emoji} {c.name}
@@ -94,7 +94,7 @@ function ShopPage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-sm mb-2">Max Price</h3>
+            <h3 className="font-semibold text-sm mb-3 text-gray-900 border-b border-border pb-2">Max Price</h3>
             <div className="flex flex-wrap gap-2 text-xs">
               {[500, 1000, 2000, 5000].map((m) => (
                 <button
@@ -105,10 +105,10 @@ function ShopPage() {
                     })
                   }
                   className={
-                    "px-3 py-1 rounded-full border " +
+                    "px-3.5 py-1.5 rounded-full border transition font-medium " +
                     (max === m
-                      ? "bg-saffron text-saffron-foreground border-saffron"
-                      : "border-border hover:border-saffron")
+                      ? "bg-saffron text-white border-saffron shadow-xs"
+                      : "border-border bg-white text-gray-700 hover:border-saffron hover:text-saffron")
                   }
                 >
                   Under ₹{m}
@@ -127,7 +127,7 @@ function ShopPage() {
                   search: (p: ShopSearch) => ({ ...p, sort: e.target.value as ShopSearch["sort"] }),
                 })
               }
-              className="text-sm border border-border rounded-md px-3 py-1.5 bg-card"
+              className="text-sm border border-border rounded-md px-3.5 py-2 bg-white text-gray-800 font-medium focus:ring-2 focus:ring-saffron outline-none shadow-xs"
             >
               <option value="popular">Most Popular</option>
               <option value="new">Newest</option>

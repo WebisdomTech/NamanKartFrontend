@@ -1,4 +1,4 @@
-import logo from "@/assets/Gemini_Generated_Image_31x9t731x9t731x9.png";
+import logo from "@/assets/image.png";
 
 type BrandLogoProps = {
   className?: string;

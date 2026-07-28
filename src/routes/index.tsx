@@ -1,8 +1,9 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ProductCard } from "@/components/ProductCard";
+import { HeroCarousel } from "@/components/HeroCarousel";
 import { api } from "@/lib/api";
 import type { Category, Product } from "@/lib/types";
-import heroImg from "@/assets/hero-devotional.webp";
+import bannerPujaItems from "@/assets/banners/home-banner-puja-items.jpeg";
 import { ShieldCheck, Truck, RotateCcw, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/")({
@@ -27,7 +28,7 @@ export const Route = createFileRoute("/")({
     ],
     links: [
       { rel: "canonical", href: "/" },
-      { rel: "preload", href: heroImg, as: "image", type: "image/webp" },
+      { rel: "preload", href: bannerPujaItems, as: "image", type: "image/jpeg" },
     ],
   }),
   component: Index,
@@ -44,70 +45,16 @@ function Index() {
 
   return (
     <div>
-      {/* HERO */}
-      <section className="relative overflow-hidden max-h-[500px] flex items-center">
-        <div className="absolute inset-0">
-          <img
-            src={heroImg}
-            alt="Authentic Devotional Products"
-            className="w-full h-full object-cover object-center"
-            width={1600}
-            height={900}
-            fetchPriority="high"
-            decoding="async"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-maroon/90 via-maroon/75 to-maroon/35" />
-        </div>
-        <div className="container-page relative py-10 sm:py-14 md:py-16 text-maroon-foreground">
-          <p className="text-gold tracking-[0.3em] text-xs md:text-sm mb-3">॥ श्री ॥</p>
-          <h1 className="font-display text-4xl md:text-6xl max-w-2xl leading-tight">
-            Authentic devotion,
-            <br />
-            delivered to your door.
-          </h1>
-          <p className="mt-4 max-w-xl text-sm md:text-base opacity-90">
-            Temple-sourced malas, idols, puja essentials, copper-brass items and prasad — handpicked
-            by devotees, for devotees.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              to="/shop"
-              className="bg-saffron text-saffron-foreground px-6 py-3 rounded-full font-medium hover:opacity-90"
-            >
-              Shop All Products
-            </Link>
-            <Link
-              to="/category/$slug"
-              params={{ slug: "tulsi-malas" }}
-              className="bg-card/15 border border-gold/40 text-maroon-foreground px-6 py-3 rounded-full font-medium hover:bg-card/25"
-            >
-              Explore Tulsi Malas
-            </Link>
-          </div>
-          <div className="mt-10 flex flex-wrap gap-x-6 gap-y-2 text-xs md:text-sm opacity-90">
-            <span className="flex items-center gap-1">
-              <ShieldCheck className="h-4 w-4 text-gold" /> Temple sourced
-            </span>
-            <span className="flex items-center gap-1">
-              <Truck className="h-4 w-4 text-gold" /> Free shipping ₹999+
-            </span>
-            <span className="flex items-center gap-1">
-              <RotateCcw className="h-4 w-4 text-gold" /> 7-day returns
-            </span>
-            <span className="flex items-center gap-1">
-              <Sparkles className="h-4 w-4 text-gold" /> COD available
-            </span>
-          </div>
-        </div>
-      </section>
+      {/* HERO CAROUSEL */}
+      <HeroCarousel />
 
       {/* CATEGORIES */}
       <section className="container-page py-14">
         <div className="om-divider mb-4">
-          <span>॥ ॐ ॥</span>
+          {/* <span>॥ ॐ ॥</span> */}
         </div>
-        <h2 className="text-center font-display text-3xl text-maroon">Shop by Category</h2>
-        <p className="text-center text-sm text-muted-foreground mt-1">
+        <h2 className="text-center font-display text-3xl font-bold text-gray-900">Shop by Category</h2>
+        <p className="text-center text-sm text-gray-500 mt-1">
           14 curated categories of devotional essentials
         </p>
         <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-7 gap-4">
@@ -116,10 +63,10 @@ function Index() {
               key={c.slug || (c as any)._id || c.name || idx}
               to="/category/$slug"
               params={{ slug: c.slug }}
-              className="group rounded-xl bg-card border border-border p-4 text-center hover:border-saffron hover:shadow-md transition"
+              className="group rounded-xl bg-white border border-border p-4 text-center hover:border-saffron hover:shadow-md transition duration-200"
             >
-              <div className="text-3xl group-hover:scale-110 transition">{c.emoji}</div>
-              <div className="mt-2 text-xs font-medium leading-tight">{c.name}</div>
+              <div className="text-3xl group-hover:scale-110 transition duration-200">{c.emoji}</div>
+              <div className="mt-2 text-xs font-semibold text-gray-800 leading-tight group-hover:text-saffron transition">{c.name}</div>
             </Link>
           ))}
         </div>
@@ -129,10 +76,10 @@ function Index() {
       <section className="container-page py-10">
         <div className="flex items-end justify-between mb-6">
           <div>
-            <h2 className="font-display text-2xl md:text-3xl text-maroon">Featured Products</h2>
-            <p className="text-sm text-muted-foreground">Most-loved picks this month</p>
+            <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900">Featured Products</h2>
+            <p className="text-sm text-gray-500">Most-loved picks this month</p>
           </div>
-          <Link to="/shop" className="text-saffron text-sm font-medium hover:underline">
+          <Link to="/shop" className="text-saffron text-sm font-semibold hover:text-saffron-hover hover:underline transition">
             View all →
           </Link>
         </div>
@@ -144,13 +91,13 @@ function Index() {
       </section>
 
       {/* BEST SELLERS */}
-      <section className="bg-cream/60 py-14">
+      <section className="bg-[#FFF8F0] border-y border-border/60 py-14">
         <div className="container-page">
-          <h2 className="font-display text-2xl md:text-3xl text-maroon text-center">
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 text-center">
             Best Sellers
           </h2>
           <div className="om-divider my-4">
-            <span className="text-xs">★</span>
+            {/* <span className="text-xs">★</span> */}
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {bestSellers.map((p, idx) => (
@@ -162,7 +109,7 @@ function Index() {
 
       {/* NEW ARRIVALS */}
       <section className="container-page py-14">
-        <h2 className="font-display text-2xl md:text-3xl text-maroon">New Arrivals</h2>
+        <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900">New Arrivals</h2>
         <div className="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
           {newArrivals.map((p, idx) => (
             <ProductCard key={p.id || (p as any)._id || p.slug || idx} product={p} />
@@ -172,13 +119,13 @@ function Index() {
 
       {/* CROSS-PROMO */}
       <section className="container-page py-10">
-        <div className="rounded-2xl bg-gradient-to-r from-maroon to-saffron text-maroon-foreground p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md">
           <div>
-            <p className="text-gold text-xs tracking-widest">SISTER COMPANY</p>
-            <h3 className="font-display text-2xl md:text-3xl mt-1">
+            <p className="text-amber-100 text-xs font-bold tracking-widest uppercase">Sister Company</p>
+            <h3 className="font-display text-2xl md:text-3xl font-bold mt-1">
               Book a Puja, Darshan or Yatra
             </h3>
-            <p className="text-sm opacity-90 mt-1">
+            <p className="text-sm text-white/90 mt-1 leading-relaxed">
               Visit NamanDarshan.com for temple bookings, prasadam delivery & astrology services.
             </p>
           </div>
@@ -186,7 +133,7 @@ function Index() {
             href="https://namandarshan.com"
             target="_blank"
             rel="noreferrer"
-            className="bg-gold text-gold-foreground px-6 py-3 rounded-full font-medium hover:opacity-90"
+            className="bg-white text-saffron px-7 py-3.5 rounded-full font-bold shadow-xs hover:bg-orange-50 hover:text-saffron-hover transition duration-200"
           >
             Visit NamanDarshan →
           </a>
@@ -195,7 +142,7 @@ function Index() {
 
       {/* TESTIMONIALS */}
       <section className="container-page py-14">
-        <h2 className="font-display text-2xl md:text-3xl text-maroon text-center">
+        <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 text-center">
           What Devotees Say
         </h2>
         <div className="om-divider my-4">
@@ -216,10 +163,10 @@ function Index() {
               q: "Their prasad box was as fresh as if I had picked it up from the temple myself.",
             },
           ].map((t) => (
-            <div key={t.n} className="rounded-xl border border-border bg-card p-6">
-              <div className="text-gold text-lg">★★★★★</div>
-              <p className="mt-3 text-sm italic">"{t.q}"</p>
-              <p className="mt-3 text-xs font-medium text-maroon">— {t.n}</p>
+            <div key={t.n} className="rounded-xl border border-border bg-white p-6 shadow-xs">
+              <div className="text-amber-500 text-lg">★★★★★</div>
+              <p className="mt-3 text-sm text-gray-700 italic leading-relaxed">"{t.q}"</p>
+              <p className="mt-3 text-xs font-semibold text-gray-900">— {t.n}</p>
             </div>
           ))}
         </div>

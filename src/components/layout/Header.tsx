@@ -29,7 +29,7 @@ export function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-40 bg-background/95 backdrop-blur border-b border-border">
+    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-border shadow-xs">
       <CrossLinkStrip />
       <div className="container-page flex items-center gap-3 py-3">
         <button
@@ -37,7 +37,7 @@ export function Header() {
           onClick={() => setOpen((v) => !v)}
           aria-label="Menu"
         >
-          <Menu className="h-5 w-5" />
+          <Menu className="h-5 w-5 text-gray-700" />
         </button>
 
         <Link to="/" className="flex items-center">
@@ -45,14 +45,14 @@ export function Header() {
         </Link>
 
         <form onSubmit={onSearch} className="hidden md:flex flex-1 mx-6 max-w-xl">
-          <div className="flex w-full rounded-full border border-border bg-card overflow-hidden shadow-sm focus-within:ring-2 focus-within:ring-saffron">
+          <div className="flex w-full rounded-full border border-border bg-white overflow-hidden shadow-xs focus-within:ring-2 focus-within:ring-saffron">
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="Search malas, idols, puja items…"
-              className="flex-1 bg-transparent px-4 py-2 text-sm outline-none"
+              className="flex-1 bg-transparent px-4 py-2 text-sm outline-none text-gray-800"
             />
-            <button className="bg-saffron text-saffron-foreground px-4 flex items-center gap-1 text-sm font-medium hover:opacity-90">
+            <button className="bg-saffron text-saffron-foreground px-5 flex items-center gap-1.5 text-sm font-semibold hover:bg-saffron-hover transition">
               <Search className="h-4 w-4" /> Search
             </button>
           </div>
@@ -61,22 +61,22 @@ export function Header() {
         <div className="ml-auto flex items-center gap-1 sm:gap-3">
           <Link
             to="/account"
-            className="hidden sm:inline-flex items-center gap-1 p-2 hover:text-saffron text-sm"
+            className="hidden sm:inline-flex items-center gap-1.5 p-2 hover:text-saffron text-sm font-medium text-gray-700"
           >
             <User className="h-5 w-5" /> <span className="hidden lg:inline">Account</span>
           </Link>
-          <Link to="/wishlist" className="relative p-2 hover:text-saffron">
+          <Link to="/wishlist" className="relative p-2 hover:text-saffron text-gray-700">
             <Heart className="h-5 w-5" />
             {wishCount > 0 && (
-              <span className="absolute -top-1 -right-1 bg-saffron text-saffron-foreground text-[10px] rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-saffron text-saffron-foreground text-[10px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
                 {wishCount}
               </span>
             )}
           </Link>
-          <Link to="/cart" className="relative p-2 hover:text-saffron">
+          <Link to="/cart" className="relative p-2 hover:text-saffron text-gray-700">
             <ShoppingBag className="h-5 w-5" />
             {count > 0 && (
-              <span className="absolute -top-1 -right-1 bg-saffron text-saffron-foreground text-[10px] rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-saffron text-saffron-foreground text-[10px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
                 {count}
               </span>
             )}
@@ -85,25 +85,25 @@ export function Header() {
       </div>
 
       <form onSubmit={onSearch} className="md:hidden container-page pb-3">
-        <div className="flex w-full rounded-full border border-border bg-card overflow-hidden">
+        <div className="flex w-full rounded-full border border-border bg-white overflow-hidden shadow-xs">
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search products…"
-            className="flex-1 bg-transparent px-4 py-2 text-sm outline-none"
+            className="flex-1 bg-transparent px-4 py-2 text-sm outline-none text-gray-800"
           />
-          <button className="bg-saffron text-saffron-foreground px-3" aria-label="Search">
+          <button className="bg-saffron text-saffron-foreground px-4" aria-label="Search">
             <Search className="h-4 w-4" />
           </button>
         </div>
       </form>
 
-      <nav className="hidden md:block border-t border-border bg-cream/50">
-        <div className="container-page flex flex-wrap gap-x-5 gap-y-1 py-2 text-sm">
-          <Link to="/" className="hover:text-saffron font-medium">
+      <nav className="hidden md:block bg-saffron text-saffron-foreground shadow-xs">
+        <div className="container-page flex flex-wrap items-center gap-x-6 gap-y-1 py-2.5 text-sm font-medium">
+          <Link to="/" className="hover:text-white/80 transition text-white font-semibold">
             Home
           </Link>
-          <Link to="/shop" className="hover:text-saffron font-medium">
+          <Link to="/shop" className="hover:text-white/80 transition text-white font-semibold">
             Shop All
           </Link>
           {categories
@@ -113,12 +113,12 @@ export function Header() {
                 key={c.slug}
                 to="/category/$slug"
                 params={{ slug: c.slug }}
-                className="hover:text-saffron"
+                className="hover:text-white/80 transition text-white/95"
               >
                 {c.name}
               </Link>
             ))}
-          <Link to="/track-order" className="hover:text-saffron ml-auto text-maroon font-medium">
+          <Link to="/track-order" className="hover:text-white/80 ml-auto text-white font-semibold transition">
             Track Order
           </Link>
         </div>
