@@ -131,7 +131,7 @@ export const api = {
  * RAZORPAY INTEGRATION POINT
  */
 export const RAZORPAY_KEY_ID =
-  (import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefined) || "rzp_test_T5RMAJzrOvuEMP";
+  (import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefined) 
 
 type RazorpaySuccess = {
   razorpay_payment_id: string;
