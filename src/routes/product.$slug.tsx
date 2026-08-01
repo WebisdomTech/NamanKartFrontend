@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Heart, Minus, Plus, ShieldCheck, Star, Truck } from "lucide-react";
 import { toast } from "sonner";
 import { ProductCard } from "@/components/ProductCard";
+import { getOptimizedImageUrl } from "@/lib/image";
 import { useCart } from "@/lib/cart-store";
 import { formatINR } from "@/lib/format";
 import { api } from "@/lib/api";
@@ -116,8 +117,8 @@ function ProductPage() {
         <div>
           <div className="aspect-square rounded-2xl overflow-hidden border border-border bg-cream">
             <img
-              src={product.images[activeImg] ?? product.images[0]}
-              alt={product.name}
+              src={getOptimizedImageUrl(product.images[activeImg] ?? product.images[0] ?? "", { width: 800 })}
+              alt={(product as any).imageAlt?.[activeImg] || product.name}
               className="w-full h-full object-cover"
             />
           </div>
@@ -132,7 +133,12 @@ function ProductPage() {
                     (activeImg === i ? "border-saffron ring-2 ring-saffron/30" : "border-border")
                   }
                 >
-                  <img src={src} alt="" className="w-full h-full object-cover" loading="lazy" />
+                  <img
+                    src={getOptimizedImageUrl(src, { width: 200 })}
+                    alt={(product as any).imageAlt?.[i] || `${product.name} ${i + 1}`}
+                    className="w-full h-full object-cover"
+                    loading="lazy"
+                  />
                 </button>
               ))}
             </div>

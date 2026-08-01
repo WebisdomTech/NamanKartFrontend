@@ -44,16 +44,16 @@ export function Header() {
           <BrandLogo compact className="" />
         </Link>
 
-        <form onSubmit={onSearch} className="hidden md:flex flex-1 mx-6 max-w-xl">
-          <div className="flex w-full rounded-full border border-border bg-white overflow-hidden shadow-xs focus-within:ring-2 focus-within:ring-saffron">
+        <form onSubmit={onSearch} className="hidden md:flex flex-1 mx-9 max-w-3xl">
+          <div className="flex w-full rounded-full border-2 border-border bg-white overflow-hidden shadow-md focus-within:ring-4 focus-within:ring-saffron/30 transition-all">
             <input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Search malas, idols, puja items…"
-              className="flex-1 bg-transparent px-4 py-2 text-sm outline-none text-gray-800"
+              placeholder="Search for Tulsi Mala, Rudraksha, Puja Items..."
+              className="flex-1 bg-transparent px-3 py-3 text-sm outline-none text-gray-900"
             />
-            <button className="bg-saffron text-saffron-foreground px-5 flex items-center gap-1.5 text-sm font-semibold hover:bg-saffron-hover transition">
-              <Search className="h-4 w-4" /> Search
+            <button className="bg-saffron text-white px-8 py-4 flex items-center gap-2 text-base font-semibold hover:bg-saffron-hover transition">
+              <Search className="h-5 w-5" /> Search
             </button>
           </div>
         </form>
@@ -90,16 +90,16 @@ export function Header() {
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="Search products…"
-            className="flex-1 bg-transparent px-4 py-2 text-sm outline-none text-gray-800"
+            className="flex-1 bg-transparent px-5 py-3 text-base font-medium placeholder:text-base placeholder:text-gray-500 outline-none text-gray-900"
           />
           <button className="bg-saffron text-saffron-foreground px-4" aria-label="Search">
-            <Search className="h-4 w-4" />
+            <Search className="h-5 w-5" />
           </button>
         </div>
       </form>
 
       <nav className="hidden md:block bg-saffron text-saffron-foreground shadow-xs">
-        <div className="container-page flex flex-wrap items-center gap-x-6 gap-y-1 py-2.5 text-sm font-medium">
+        <div className="container-page flex flex-wrap items-center gap-x-8 gap-y-2 py-4 text-base font-semibold">
           <Link to="/" className="hover:text-white/80 transition text-white font-semibold">
             Home
           </Link>

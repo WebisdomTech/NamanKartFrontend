@@ -6,6 +6,8 @@ import { useCart } from "@/lib/cart-store";
 import { formatINR } from "@/lib/format";
 import type { Product } from "@/lib/types";
 
+import { getOptimizedImageUrl } from "@/lib/image";
+
 export const ProductCard = memo(function ProductCard({ product }: { product: Product }) {
   const wished = useCart((s) => s.wishlist.includes(product.id));
   const toggleWish = useCart((s) => s.toggleWish);
@@ -22,7 +24,10 @@ export const ProductCard = memo(function ProductCard({ product }: { product: Pro
         : 0,
     [product.basePrice, product.salePrice],
   );
-  const cover = product.images?.[0];
+  const cover = useMemo(
+    () => getOptimizedImageUrl(product.images?.[0] || "", { width: 400 }),
+    [product.images]
+  );
 
   return (
     <div className="group relative rounded-xl border border-border bg-card overflow-hidden hover:shadow-lg hover:-translate-y-0.5 transition">
