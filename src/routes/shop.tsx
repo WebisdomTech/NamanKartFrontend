@@ -67,14 +67,19 @@ function ShopPage() {
         {/* Filters */}
         <aside className="space-y-6 bg-white p-5 rounded-xl border border-border shadow-xs">
           <div>
-            <h3 className="font-semibold text-sm mb-3 text-gray-900 border-b border-border pb-2">Category</h3>
+            <h3 className="font-semibold text-sm mb-3 text-gray-900 border-b border-border pb-2">
+              Category
+            </h3>
             <ul className="space-y-1.5 text-sm">
               <li>
                 <button
                   onClick={() =>
                     navigate({ search: (p: ShopSearch) => ({ ...p, cat: undefined }) })
                   }
-                  className={"hover:text-saffron transition " + (!cat ? "text-saffron font-semibold" : "text-gray-700")}
+                  className={
+                    "hover:text-saffron transition " +
+                    (!cat ? "text-saffron font-semibold" : "text-gray-700")
+                  }
                 >
                   All categories
                 </button>
@@ -84,7 +89,8 @@ function ShopPage() {
                   <button
                     onClick={() => navigate({ search: (p: ShopSearch) => ({ ...p, cat: c.slug }) })}
                     className={
-                      "hover:text-saffron transition " + (cat === c.slug ? "text-saffron font-semibold" : "text-gray-700")
+                      "hover:text-saffron transition " +
+                      (cat === c.slug ? "text-saffron font-semibold" : "text-gray-700")
                     }
                   >
                     {c.emoji} {c.name}
@@ -94,7 +100,9 @@ function ShopPage() {
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-sm mb-3 text-gray-900 border-b border-border pb-2">Max Price</h3>
+            <h3 className="font-semibold text-sm mb-3 text-gray-900 border-b border-border pb-2">
+              Max Price
+            </h3>
             <div className="flex flex-wrap gap-2 text-xs">
               {[500, 1000, 2000, 5000].map((m) => (
                 <button

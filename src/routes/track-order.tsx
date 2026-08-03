@@ -26,7 +26,7 @@ function Track() {
 
   async function lookup(e: React.FormEvent) {
     e.preventDefault();
-    const o = await api.getOrder(id.trim(), email.trim() || undefined);
+    const o = await api.getOrder(id.trim(), email.trim());
     if (!o) {
       toast.error("Order not found. Check your Order ID and email.");
       setOrder(null);
@@ -53,8 +53,10 @@ function Track() {
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email (optional)"
+          placeholder="Email used at checkout"
+          type="email"
           className="border border-border rounded-md px-3 py-2 text-sm bg-background"
+          required
         />
         <button className="bg-saffron text-saffron-foreground px-4 py-2 rounded-md font-medium">
           Track

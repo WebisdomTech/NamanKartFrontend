@@ -6,7 +6,7 @@
  */
 export function getOptimizedImageUrl(
   url: string,
-  options: { width?: number; height?: number; quality?: string | number; format?: string } = {}
+  options: { width?: number; height?: number; quality?: string | number; format?: string } = {},
 ): string {
   if (!url || typeof url !== "string" || !url.includes("cloudinary.com")) {
     return url || "";

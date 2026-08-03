@@ -1,6 +1,7 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api";
+import { useAuth } from "@/lib/auth-store";
 import { formatINR } from "@/lib/format";
 import type { Order } from "@/lib/types";
 
@@ -12,18 +13,47 @@ export const Route = createFileRoute("/account")({
 });
 
 function Account() {
+  const { user, status, logout, hydrate } = useAuth();
+  const navigate = useNavigate();
   const [orders, setOrders] = useState<Order[]>([]);
+
   useEffect(() => {
-    api.listMyOrders().then(setOrders);
-  }, []);
+    hydrate();
+  }, [hydrate]);
+
+  useEffect(() => {
+    if (status === "ready" && !user) {
+      navigate({ to: "/login" });
+    }
+  }, [status, user, navigate]);
+
+  useEffect(() => {
+    if (user) api.listMyOrders().then(setOrders);
+  }, [user]);
+
+  if (status !== "ready" || !user) {
+    return <div className="container-page py-20 text-center text-muted-foreground">Loading…</div>;
+  }
 
   return (
     <div className="container-page py-8">
-      <h1 className="font-display text-3xl text-maroon">My Account</h1>
-      <p className="text-sm text-muted-foreground">
-        Guest mode — your orders are stored locally on this device. (Wire up real auth via your
-        backend.)
-      </p>
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h1 className="font-display text-3xl text-maroon">My Account</h1>
+          <p className="text-sm text-muted-foreground">
+            {user.fullName} · {user.email}
+          </p>
+        </div>
+        <button
+          onClick={() => {
+            logout();
+            navigate({ to: "/" });
+          }}
+          className="text-sm font-medium border border-border rounded-md px-4 py-2 hover:bg-muted"
+        >
+          Log out
+        </button>
+      </div>
 
       <h2 className="font-semibold mt-8 mb-3">Recent Orders</h2>
       {orders.length === 0 ? (

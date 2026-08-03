@@ -11,17 +11,22 @@ export const Route = createFileRoute("/order-confirmation")({
   head: () => ({
     meta: [{ title: "Order Confirmed — NamanKart" }, { name: "robots", content: "noindex" }],
   }),
-  validateSearch: zodValidator(z.object({ id: fallback(z.string(), "").default("") })),
+  validateSearch: zodValidator(
+    z.object({
+      id: fallback(z.string(), "").default(""),
+      email: fallback(z.string(), "").default(""),
+    }),
+  ),
   component: OrderConfirmed,
 });
 
 function OrderConfirmed() {
-  const { id } = Route.useSearch();
+  const { id, email } = Route.useSearch();
   const [order, setOrder] = useState<Order | null>(null);
 
   useEffect(() => {
-    if (id) api.getOrder(id).then((o) => setOrder(o ?? null));
-  }, [id]);
+    if (id) api.getOrder(id, email || undefined).then((o) => setOrder(o ?? null));
+  }, [id, email]);
 
   return (
     <div className="container-page py-12 max-w-2xl">

@@ -117,7 +117,9 @@ function ProductPage() {
         <div>
           <div className="aspect-square rounded-2xl overflow-hidden border border-border bg-cream">
             <img
-              src={getOptimizedImageUrl(product.images[activeImg] ?? product.images[0] ?? "", { width: 800 })}
+              src={getOptimizedImageUrl(product.images[activeImg] ?? product.images[0] ?? "", {
+                width: 800,
+              })}
               alt={(product as any).imageAlt?.[activeImg] || product.name}
               className="w-full h-full object-cover"
             />
@@ -300,31 +302,38 @@ function ProductPage() {
                 </li>
               </ul>
 
-              {Array.isArray(product.specificationsTable) && product.specificationsTable.length > 0 && (
-                <div className="mt-4 border border-border rounded-lg overflow-hidden">
-                  <table className="w-full text-xs text-left">
-                    <thead className="bg-cream border-b border-border">
-                      <tr>
-                        <th className="p-2 font-bold">Specification</th>
-                        <th className="p-2 font-bold">Details</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {product.specificationsTable.map((row: any, i: number) => (
-                        <tr key={i} className="border-b border-border/50">
-                          <td className="p-2 font-medium">{row.key || row.attribute || `Spec ${i+1}`}</td>
-                          <td className="p-2 text-muted-foreground">{row.value || row.detail || String(row)}</td>
+              {Array.isArray(product.specificationsTable) &&
+                product.specificationsTable.length > 0 && (
+                  <div className="mt-4 border border-border rounded-lg overflow-hidden">
+                    <table className="w-full text-xs text-left">
+                      <thead className="bg-cream border-b border-border">
+                        <tr>
+                          <th className="p-2 font-bold">Specification</th>
+                          <th className="p-2 font-bold">Details</th>
                         </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              )}
+                      </thead>
+                      <tbody>
+                        {product.specificationsTable.map((row: any, i: number) => (
+                          <tr key={i} className="border-b border-border/50">
+                            <td className="p-2 font-medium">
+                              {row.key || row.attribute || `Spec ${i + 1}`}
+                            </td>
+                            <td className="p-2 text-muted-foreground">
+                              {row.value || row.detail || String(row)}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
             </div>
           )}
           {tab === "shipping" && (
             <div className="space-y-3">
-              <p className="font-medium text-maroon">{product.shippingDescription || "Standard PAN India Shipping & Delivery Policy"}</p>
+              <p className="font-medium text-maroon">
+                {product.shippingDescription || "Standard PAN India Shipping & Delivery Policy"}
+              </p>
               {Array.isArray(product.shippingPoints) && product.shippingPoints.length > 0 ? (
                 <ul className="space-y-1 text-xs">
                   {product.shippingPoints.map((pt: string, i: number) => (
@@ -352,21 +361,20 @@ function ProductPage() {
               {Array.isArray(product.reviewHighlights) && product.reviewHighlights.length > 0 && (
                 <div className="flex flex-wrap gap-2 my-2">
                   {product.reviewHighlights.map((hl: string, i: number) => (
-                    <span key={i} className="px-2 py-1 bg-cream text-saffron font-medium text-xs rounded-full border border-saffron/20">
+                    <span
+                      key={i}
+                      className="px-2 py-1 bg-cream text-saffron font-medium text-xs rounded-full border border-saffron/20"
+                    >
                       ✓ {hl}
                     </span>
                   ))}
                 </div>
               )}
-              {[1, 2, 3].map((i) => (
-                <div key={i} className="border border-border rounded-md p-4 bg-cream/30">
-                  <div className="text-gold text-sm">★★★★★</div>
-                  <p className="text-sm mt-1">
-                    "Authentic item, temple-sourced quality verified upon arrival. Shipped securely with care."
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">— Verified Devotee</p>
-                </div>
-              ))}
+              {!product.reviewHeading &&
+                !product.reviewDescription &&
+                (!product.reviewHighlights || product.reviewHighlights.length === 0) && (
+                  <p className="text-sm text-muted-foreground">No reviews yet for this product.</p>
+                )}
             </div>
           )}
         </div>

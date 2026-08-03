@@ -1,10 +1,11 @@
 /**
  * Production API client connecting NamanKart Frontend directly to Express + MongoDB Backend.
  */
-import type { Address, Category, Order, Product } from "./types";
+import type { Address, AuthUser, Category, Order, Product } from "./types";
 
 const RAW_API_URL =
-  (import.meta.env.VITE_API_BASE_URL as string | undefined) || "https://namankartbackend.onrender.com";
+  (import.meta.env.VITE_API_BASE_URL as string | undefined) ||
+  "https://namankartbackend.onrender.com";
 
 /** Single Source of Truth for API version prefix */
 export const API_BASE_URL = RAW_API_URL.replace(/\/+$/, "").endsWith("/api/v1")
@@ -86,11 +87,11 @@ export const api = {
     address: Address;
     email: string;
     paymentMethod: Order["paymentMethod"];
-    subtotal: number;
-    shipping: number;
-    discount: number;
-    total: number;
+    couponCode?: string;
   }): Promise<Order> => {
+    // Pricing (subtotal/shipping/discount/total) is always computed and
+    // trusted server-side from live product prices and the coupon code —
+    // the backend ignores anything else, so there's nothing to send here.
     return fetchApi<Order>("/orders", {
       method: "POST",
       body: JSON.stringify({
@@ -102,17 +103,17 @@ export const api = {
         shippingAddress: input.address,
         email: input.email,
         paymentMethod: input.paymentMethod,
+        couponCode: input.couponCode,
       }),
     });
   },
 
+  // Non-owners are rejected server-side (403), so email must be supplied
+  // for anyone who isn't looking up their own logged-in order.
   getOrder: async (id: string, email?: string): Promise<Order | undefined> => {
     try {
-      const order = await fetchApi<Order>(`/orders/${id}`);
-      if (email && order.email?.toLowerCase() !== email.toLowerCase()) {
-        return undefined;
-      }
-      return order;
+      const query = email ? `?email=${encodeURIComponent(email)}` : "";
+      return await fetchApi<Order>(`/orders/${id}${query}`);
     } catch {
       return undefined;
     }
@@ -125,13 +126,48 @@ export const api = {
       return [];
     }
   },
+
+  applyCoupon: async (
+    code: string,
+    orderAmount: number,
+  ): Promise<{
+    code: string;
+    discount: number;
+    type: string;
+    value: number;
+    finalAmount: number;
+  }> => {
+    return fetchApi("/coupons/apply", {
+      method: "POST",
+      body: JSON.stringify({ code, orderAmount }),
+    });
+  },
+
+  register: async (input: {
+    fullName: string;
+    email: string;
+    password: string;
+    phone?: string;
+  }): Promise<{ user: AuthUser; tokens: { accessToken: string; refreshToken: string } }> => {
+    return fetchApi("/auth/register", { method: "POST", body: JSON.stringify(input) });
+  },
+
+  login: async (input: {
+    email: string;
+    password: string;
+  }): Promise<{ user: AuthUser; accessToken: string; refreshToken: string }> => {
+    return fetchApi("/auth/login", { method: "POST", body: JSON.stringify(input) });
+  },
+
+  getMe: async (): Promise<AuthUser> => {
+    return fetchApi("/auth/me");
+  },
 };
 
 /**
  * RAZORPAY INTEGRATION POINT
  */
-export const RAZORPAY_KEY_ID =
-  (import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefined) 
+export const RAZORPAY_KEY_ID = (import.meta.env.VITE_RAZORPAY_KEY_ID as string | undefined) || "";
 
 type RazorpaySuccess = {
   razorpay_payment_id: string;

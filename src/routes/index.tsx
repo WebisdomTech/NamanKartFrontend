@@ -50,10 +50,10 @@ function Index() {
 
       {/* CATEGORIES */}
       <section className="container-page py-14">
-        <div className="om-divider mb-4">
-          {/* <span>॥ ॐ ॥</span> */}
-        </div>
-        <h2 className="text-center font-display text-3xl font-bold text-gray-900">Shop by Category</h2>
+        <div className="om-divider mb-4">{/* <span>॥ ॐ ॥</span> */}</div>
+        <h2 className="text-center font-display text-3xl font-bold text-gray-900">
+          Shop by Category
+        </h2>
         <p className="text-center text-sm text-gray-500 mt-1">
           14 curated categories of devotional essentials
         </p>
@@ -65,8 +65,12 @@ function Index() {
               params={{ slug: c.slug }}
               className="group rounded-xl bg-white border border-border p-4 text-center hover:border-saffron hover:shadow-md transition duration-200"
             >
-              <div className="text-3xl group-hover:scale-110 transition duration-200">{c.emoji}</div>
-              <div className="mt-2 text-xs font-semibold text-gray-800 leading-tight group-hover:text-saffron transition">{c.name}</div>
+              <div className="text-3xl group-hover:scale-110 transition duration-200">
+                {c.emoji}
+              </div>
+              <div className="mt-2 text-xs font-semibold text-gray-800 leading-tight group-hover:text-saffron transition">
+                {c.name}
+              </div>
             </Link>
           ))}
         </div>
@@ -76,10 +80,15 @@ function Index() {
       <section className="container-page py-10">
         <div className="flex items-end justify-between mb-6">
           <div>
-            <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900">Featured Products</h2>
+            <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900">
+              Featured Products
+            </h2>
             <p className="text-sm text-gray-500">Most-loved picks this month</p>
           </div>
-          <Link to="/shop" className="text-saffron text-sm font-semibold hover:text-saffron-hover hover:underline transition">
+          <Link
+            to="/shop"
+            className="text-saffron text-sm font-semibold hover:text-saffron-hover hover:underline transition"
+          >
             View all →
           </Link>
         </div>
@@ -96,9 +105,7 @@ function Index() {
           <h2 className="font-display text-2xl md:text-3xl font-bold text-gray-900 text-center">
             Best Sellers
           </h2>
-          <div className="om-divider my-4">
-            {/* <span className="text-xs">★</span> */}
-          </div>
+          <div className="om-divider my-4">{/* <span className="text-xs">★</span> */}</div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {bestSellers.map((p, idx) => (
               <ProductCard key={p.id || (p as any)._id || p.slug || idx} product={p} />
@@ -121,7 +128,9 @@ function Index() {
       <section className="container-page py-10">
         <div className="rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white p-8 md:p-12 flex flex-col md:flex-row items-center justify-between gap-6 shadow-md">
           <div>
-            <p className="text-amber-100 text-xs font-bold tracking-widest uppercase">Sister Company</p>
+            <p className="text-amber-100 text-xs font-bold tracking-widest uppercase">
+              Sister Company
+            </p>
             <h3 className="font-display text-2xl md:text-3xl font-bold mt-1">
               Book a Puja, Darshan or Yatra
             </h3>

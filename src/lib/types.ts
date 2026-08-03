@@ -94,6 +94,14 @@ export type Address = {
   country: string;
 };
 
+export type AuthUser = {
+  id: string;
+  fullName: string;
+  email: string;
+  phone?: string;
+  role: "customer" | "admin" | "manager" | "super_admin";
+};
+
 export type Order = {
   id: string;
   items: { productId: string; name: string; qty: number; price: number; variantName?: string }[];

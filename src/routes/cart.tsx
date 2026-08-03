@@ -21,8 +21,11 @@ function CartPage() {
   const items = useCart((s) => s.items);
   const setQty = useCart((s) => s.setQty);
   const remove = useCart((s) => s.remove);
-  const [coupon, setCoupon] = useState("");
-  const [discount, setDiscount] = useState(0);
+  const coupon = useCart((s) => s.coupon);
+  const applyCouponToStore = useCart((s) => s.applyCoupon);
+  const clearCoupon = useCart((s) => s.clearCoupon);
+  const [couponInput, setCouponInput] = useState(coupon?.code ?? "");
+  const [applying, setApplying] = useState(false);
 
   const detailed = items
     .map((it) => {
@@ -35,14 +38,21 @@ function CartPage() {
 
   const subtotal = detailed.reduce((n, x) => n + x.price * x.qty, 0);
   const shipping = computeShipping(subtotal);
+  const discount = coupon?.discount ?? 0;
   const total = subtotal + shipping - discount;
 
-  function applyCoupon() {
-    if (coupon.toUpperCase() === "BHAKTI10") {
-      setDiscount(Math.round(subtotal * 0.1));
-      toast.success("Coupon applied: 10% off");
-    } else {
-      toast.error("Invalid or expired coupon");
+  async function applyCoupon() {
+    if (!couponInput.trim()) return;
+    setApplying(true);
+    try {
+      const result = await api.applyCoupon(couponInput.trim(), subtotal);
+      applyCouponToStore({ code: result.code, discount: result.discount });
+      toast.success(`Coupon applied: ${result.code}`);
+    } catch (e) {
+      clearCoupon();
+      toast.error(e instanceof Error ? e.message : "Invalid or expired coupon");
+    } finally {
+      setApplying(false);
     }
   }
 
@@ -148,21 +158,31 @@ function CartPage() {
           )}
           <div className="mt-3 flex gap-2">
             <input
-              value={coupon}
-              onChange={(e) => setCoupon(e.target.value)}
+              value={couponInput}
+              onChange={(e) => setCouponInput(e.target.value)}
               placeholder="Coupon code"
               className="flex-1 border border-border rounded-md px-3 py-2 text-sm bg-background"
             />
-            <button
-              onClick={applyCoupon}
-              className="px-3 py-2 text-sm border border-saffron text-saffron rounded-md hover:bg-saffron hover:text-saffron-foreground"
-            >
-              Apply
-            </button>
+            {coupon ? (
+              <button
+                onClick={() => {
+                  clearCoupon();
+                  setCouponInput("");
+                }}
+                className="px-3 py-2 text-sm border border-border rounded-md hover:bg-muted"
+              >
+                Remove
+              </button>
+            ) : (
+              <button
+                onClick={applyCoupon}
+                disabled={applying}
+                className="px-3 py-2 text-sm border border-saffron text-saffron rounded-md hover:bg-saffron hover:text-saffron-foreground disabled:opacity-50"
+              >
+                {applying ? "Applying…" : "Apply"}
+              </button>
+            )}
           </div>
-          <p className="text-[10px] text-muted-foreground mt-1">
-            Try <b>BHAKTI10</b> for 10% off
-          </p>
           <div className="border-t border-border my-4" />
           <div className="flex justify-between font-semibold text-lg">
             <span>Total</span>

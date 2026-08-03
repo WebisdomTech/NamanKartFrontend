@@ -26,7 +26,7 @@ export const ProductCard = memo(function ProductCard({ product }: { product: Pro
   );
   const cover = useMemo(
     () => getOptimizedImageUrl(product.images?.[0] || "", { width: 400 }),
-    [product.images]
+    [product.images],
   );
 
   return (

@@ -2,15 +2,20 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { CartItem } from "./types";
 
+type Coupon = { code: string; discount: number };
+
 type CartState = {
   items: CartItem[];
   wishlist: string[];
+  coupon: Coupon | null;
   add: (productId: string, variantId?: string, qty?: number) => void;
   remove: (productId: string, variantId?: string) => void;
   setQty: (productId: string, variantId: string | undefined, qty: number) => void;
   clear: () => void;
   toggleWish: (productId: string) => void;
   count: () => number;
+  applyCoupon: (coupon: Coupon) => void;
+  clearCoupon: () => void;
 };
 
 export const useCart = create<CartState>()(
@@ -18,6 +23,7 @@ export const useCart = create<CartState>()(
     (set, get) => ({
       items: [],
       wishlist: [],
+      coupon: null,
       add: (productId, variantId, qty = 1) =>
         set((s) => {
           const i = s.items.findIndex(
@@ -42,7 +48,7 @@ export const useCart = create<CartState>()(
             )
             .filter((x) => x.qty > 0),
         })),
-      clear: () => set({ items: [] }),
+      clear: () => set({ items: [], coupon: null }),
       toggleWish: (productId) =>
         set((s) => ({
           wishlist: s.wishlist.includes(productId)
@@ -50,6 +56,8 @@ export const useCart = create<CartState>()(
             : [...s.wishlist, productId],
         })),
       count: () => get().items.reduce((n, x) => n + x.qty, 0),
+      applyCoupon: (coupon) => set({ coupon }),
+      clearCoupon: () => set({ coupon: null }),
     }),
     { name: "nk-cart" },
   ),

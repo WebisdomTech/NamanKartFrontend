@@ -40,6 +40,7 @@ function CheckoutPage() {
   const { products } = Route.useLoaderData() as { products: Product[] };
   const items = useCart((s) => s.items);
   const clear = useCart((s) => s.clear);
+  const coupon = useCart((s) => s.coupon);
   const navigate = useNavigate();
   const [paymentMethod, setPaymentMethod] = useState<"razorpay" | "cod">("razorpay");
   const [loading, setLoading] = useState(false);
@@ -66,7 +67,8 @@ function CheckoutPage() {
 
   const subtotal = detailed.reduce((n, x) => n + x.price * x.qty, 0);
   const shipping = computeShipping(subtotal);
-  const total = subtotal + shipping;
+  const discount = coupon?.discount ?? 0;
+  const total = subtotal + shipping - discount;
 
   if (detailed.length === 0) {
     return (
@@ -111,13 +113,10 @@ function CheckoutPage() {
         address: { ...parsed.data, line2: parsed.data.line2 || undefined },
         email: parsed.data.email,
         paymentMethod,
-        subtotal,
-        shipping,
-        discount: 0,
-        total,
+        couponCode: coupon?.code,
       });
       clear();
-      navigate({ to: "/order-confirmation", search: { id: order.id } });
+      navigate({ to: "/order-confirmation", search: { id: order.id, email: parsed.data.email } });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not place order");
     } finally {
@@ -258,6 +257,12 @@ function CheckoutPage() {
               <span>Shipping</span>
               <span>{shipping === 0 ? "FREE" : formatINR(shipping)}</span>
             </div>
+            {discount > 0 && (
+              <div className="flex justify-between text-saffron">
+                <span>Discount {coupon ? `(${coupon.code})` : ""}</span>
+                <span>−{formatINR(discount)}</span>
+              </div>
+            )}
           </div>
           <div className="border-t border-border my-3" />
           <div className="flex justify-between font-semibold text-lg">

@@ -2,14 +2,17 @@ import { Link, useNavigate } from "@tanstack/react-router";
 import { Heart, Menu, Search, ShoppingBag, User } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useCart } from "@/lib/cart-store";
+import { useAuth } from "@/lib/auth-store";
 import { api } from "@/lib/api";
 import type { Category } from "@/lib/types";
-import { CrossLinkStrip } from "./CrossLinkStrip";
+import { TopUtilityBar } from "./TopUtilityBar";
 import { BrandLogo } from "./BrandLogo";
 
 export function Header() {
   const count = useCart((s) => s.items.reduce((n, x) => n + x.qty, 0));
   const wishCount = useCart((s) => s.wishlist.length);
+  const user = useAuth((s) => s.user);
+  const hydrateAuth = useAuth((s) => s.hydrate);
   const [q, setQ] = useState("");
   const [open, setOpen] = useState(false);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -22,6 +25,10 @@ export function Header() {
       .catch(() => {});
   }, []);
 
+  useEffect(() => {
+    hydrateAuth();
+  }, [hydrateAuth]);
+
   function onSearch(e: React.FormEvent) {
     e.preventDefault();
     if (!q.trim()) return;
@@ -30,7 +37,7 @@ export function Header() {
 
   return (
     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur border-b border-border shadow-xs">
-      <CrossLinkStrip />
+      <TopUtilityBar />
       <div className="container-page flex items-center gap-3 py-3">
         <button
           className="md:hidden p-2 -ml-2"
@@ -60,10 +67,11 @@ export function Header() {
 
         <div className="ml-auto flex items-center gap-1 sm:gap-3">
           <Link
-            to="/account"
+            to={user ? "/account" : "/login"}
             className="hidden sm:inline-flex items-center gap-1.5 p-2 hover:text-saffron text-sm font-medium text-gray-700"
           >
-            <User className="h-5 w-5" /> <span className="hidden lg:inline">Account</span>
+            <User className="h-5 w-5" />{" "}
+            <span className="hidden lg:inline">{user ? user.fullName.split(" ")[0] : "Login"}</span>
           </Link>
           <Link to="/wishlist" className="relative p-2 hover:text-saffron text-gray-700">
             <Heart className="h-5 w-5" />
@@ -99,28 +107,52 @@ export function Header() {
       </form>
 
       <nav className="hidden md:block bg-saffron text-saffron-foreground shadow-xs">
-        <div className="container-page flex flex-wrap items-center gap-x-8 gap-y-2 py-4 text-base font-semibold">
-          <Link to="/" className="hover:text-white/80 transition text-white font-semibold">
-            Home
-          </Link>
-          <Link to="/shop" className="hover:text-white/80 transition text-white font-semibold">
-            Shop All
-          </Link>
-          {categories
-            .filter((c) => c.isFeatured)
-            .map((c) => (
-              <Link
-                key={c.slug}
-                to="/category/$slug"
-                params={{ slug: c.slug }}
-                className="hover:text-white/80 transition text-white/95"
-              >
-                {c.name}
-              </Link>
-            ))}
-          <Link to="/track-order" className="hover:text-white/80 ml-auto text-white font-semibold transition">
-            Track Order
-          </Link>
+        <div className="container-page flex items-center gap-3">
+          {/* Phantom BrandLogo spacer matching top row Logo width */}
+          <div
+            className="flex items-center shrink-0 pointer-events-none opacity-0 select-none"
+            aria-hidden="true"
+          >
+            <BrandLogo compact />
+          </div>
+
+          {/* Navigation container matching exact search bar left offset, width, and container alignment */}
+          <div className="flex-1 mx-9 max-w-3xl flex flex-wrap items-center gap-x-8 gap-y-2 py-3.5 text-base font-semibold">
+            <Link to="/" className="hover:text-white/80 transition text-white font-semibold">
+              Home
+            </Link>
+            <Link to="/shop" className="hover:text-white/80 transition text-white font-semibold">
+              Shop All
+            </Link>
+            <Link
+              to="/category/$slug"
+              params={{ slug: "prasad" }}
+              className="hover:text-white/80 transition text-white/95 font-semibold"
+            >
+              Prasad
+            </Link>
+            <Link
+              to="/category/$slug"
+              params={{ slug: "copper-brass" }}
+              className="hover:text-white/80 transition text-white/95 font-semibold"
+            >
+              Copper & Brass
+            </Link>
+            <Link
+              to="/category/$slug"
+              params={{ slug: "puja-items" }}
+              className="hover:text-white/80 transition text-white/95 font-semibold"
+            >
+              Puja Items
+            </Link>
+            <Link
+              to="/category/$slug"
+              params={{ slug: "lockets" }}
+              className="hover:text-white/80 transition text-white/95 font-semibold"
+            >
+              Lockets & Pendants
+            </Link>
+          </div>
         </div>
       </nav>
 

@@ -45,7 +45,11 @@ export function Footer() {
             </li>
             {categories.slice(0, 6).map((c) => (
               <li key={c.slug}>
-                <Link to="/category/$slug" params={{ slug: c.slug }} className="hover:text-saffron transition">
+                <Link
+                  to="/category/$slug"
+                  params={{ slug: c.slug }}
+                  className="hover:text-saffron transition"
+                >
                   {c.name}
                 </Link>
               </li>
