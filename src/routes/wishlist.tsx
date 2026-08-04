@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ProductCard } from "@/components/ProductCard";
 import { useCart } from "@/lib/cart-store";
+import { useRequireAuth } from "@/lib/use-require-auth";
 import { api } from "@/lib/api";
 import type { Product } from "@/lib/types";
 
@@ -19,6 +20,11 @@ function Wishlist() {
   const { products } = Route.useLoaderData() as { products: Product[] };
   const ids = useCart((s) => s.wishlist);
   const items = products.filter((p) => ids.includes(p.id) || ids.includes((p as any)._id));
+  const { ready } = useRequireAuth("/wishlist");
+
+  if (!ready) {
+    return <div className="container-page py-20 text-center text-muted-foreground">Loading…</div>;
+  }
 
   return (
     <div className="container-page py-8">

@@ -73,7 +73,11 @@ export function Header() {
             <User className="h-5 w-5" />{" "}
             <span className="hidden lg:inline">{user ? user.fullName.split(" ")[0] : "Login"}</span>
           </Link>
-          <Link to="/wishlist" className="relative p-2 hover:text-saffron text-gray-700">
+          <Link
+            to={user ? "/wishlist" : "/login"}
+            search={user ? undefined : { redirect: "/wishlist" }}
+            className="relative p-2 hover:text-saffron text-gray-700"
+          >
             <Heart className="h-5 w-5" />
             {wishCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-saffron text-saffron-foreground text-[10px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
@@ -81,7 +85,11 @@ export function Header() {
               </span>
             )}
           </Link>
-          <Link to="/cart" className="relative p-2 hover:text-saffron text-gray-700">
+          <Link
+            to={user ? "/cart" : "/login"}
+            search={user ? undefined : { redirect: "/cart" }}
+            className="relative p-2 hover:text-saffron text-gray-700"
+          >
             <ShoppingBag className="h-5 w-5" />
             {count > 0 && (
               <span className="absolute -top-1 -right-1 bg-saffron text-saffron-foreground text-[10px] font-bold rounded-full h-4 min-w-4 px-1 flex items-center justify-center">
@@ -175,8 +183,8 @@ export function Header() {
                 {c.emoji} {c.name}
               </Link>
             ))}
-            <Link to="/account" onClick={() => setOpen(false)}>
-              My Account
+            <Link to={user ? "/account" : "/login"} onClick={() => setOpen(false)}>
+              {user ? `My Account (${user.fullName.split(" ")[0]})` : "Login / Sign Up"}
             </Link>
             <Link to="/track-order" onClick={() => setOpen(false)}>
               Track Order

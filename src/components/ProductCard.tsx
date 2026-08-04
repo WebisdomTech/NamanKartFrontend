@@ -1,8 +1,9 @@
 import { memo, useMemo } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useNavigate } from "@tanstack/react-router";
 import { Heart, Star } from "lucide-react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-store";
+import { useAuth } from "@/lib/auth-store";
 import { formatINR } from "@/lib/format";
 import type { Product } from "@/lib/types";
 
@@ -12,6 +13,13 @@ export const ProductCard = memo(function ProductCard({ product }: { product: Pro
   const wished = useCart((s) => s.wishlist.includes(product.id));
   const toggleWish = useCart((s) => s.toggleWish);
   const add = useCart((s) => s.add);
+  const user = useAuth((s) => s.user);
+  const navigate = useNavigate();
+
+  function requireLogin(redirect: "/wishlist" | "/cart") {
+    toast.message("Please log in to continue");
+    navigate({ to: "/login", search: { redirect } });
+  }
 
   const price = useMemo(
     () => product.salePrice ?? product.basePrice,
@@ -55,7 +63,7 @@ export const ProductCard = memo(function ProductCard({ product }: { product: Pro
         )}
       </Link>
       <button
-        onClick={() => toggleWish(product.id)}
+        onClick={() => (user ? toggleWish(product.id) : requireLogin("/wishlist"))}
         className="absolute top-2 right-2 p-1.5 rounded-full bg-background/90 border border-border hover:text-saffron"
         aria-label="Wishlist"
       >
@@ -80,6 +88,7 @@ export const ProductCard = memo(function ProductCard({ product }: { product: Pro
         </div>
         <button
           onClick={() => {
+            if (!user) return requireLogin("/cart");
             add(product.id);
             toast.success(`${product.name} added to cart`);
           }}

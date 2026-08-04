@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { api, startRazorpayPayment } from "@/lib/api";
 import { useCart } from "@/lib/cart-store";
+import { useRequireAuth } from "@/lib/use-require-auth";
 import { computeShipping, formatINR } from "@/lib/format";
 import type { Product } from "@/lib/types";
 
@@ -42,6 +43,7 @@ function CheckoutPage() {
   const clear = useCart((s) => s.clear);
   const coupon = useCart((s) => s.coupon);
   const navigate = useNavigate();
+  const { user, ready } = useRequireAuth("/checkout");
   const [paymentMethod, setPaymentMethod] = useState<"razorpay" | "cod">("razorpay");
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({
@@ -56,6 +58,19 @@ function CheckoutPage() {
     country: "India" as const,
   });
 
+  // Pre-fill from the account once it's loaded (useState's initializer above
+  // ran before hydration finished, so this can't be done inline).
+  useEffect(() => {
+    if (user) {
+      setForm((f) => ({
+        ...f,
+        fullName: f.fullName || user.fullName || "",
+        phone: f.phone || user.phone || "",
+        email: f.email || user.email || "",
+      }));
+    }
+  }, [user]);
+
   const detailed = items
     .map((it) => {
       const p = products.find((x) => x.id === it.productId || (x as any)._id === it.productId);
@@ -69,6 +84,10 @@ function CheckoutPage() {
   const shipping = computeShipping(subtotal);
   const discount = coupon?.discount ?? 0;
   const total = subtotal + shipping - discount;
+
+  if (!ready) {
+    return <div className="container-page py-20 text-center text-muted-foreground">Loading…</div>;
+  }
 
   if (detailed.length === 0) {
     return (

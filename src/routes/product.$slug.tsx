@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { ProductCard } from "@/components/ProductCard";
 import { getOptimizedImageUrl } from "@/lib/image";
 import { useCart } from "@/lib/cart-store";
+import { useAuth } from "@/lib/auth-store";
 import { formatINR } from "@/lib/format";
 import { api } from "@/lib/api";
 import type { Product, Variant } from "@/lib/types";
@@ -75,7 +76,13 @@ function ProductPage() {
   const add = useCart((s) => s.add);
   const toggleWish = useCart((s) => s.toggleWish);
   const wished = useCart((s) => s.wishlist.includes(product.id));
+  const user = useAuth((s) => s.user);
   const navigate = useNavigate();
+
+  function requireLogin(redirect: "/wishlist" | "/cart" | "/checkout") {
+    toast.message("Please log in to continue");
+    navigate({ to: "/login", search: { redirect } });
+  }
 
   const variant = product.variants?.find((v: Variant) => v.id === variantId);
   const price = variant?.salePrice ?? variant?.price ?? product.salePrice ?? product.basePrice;
@@ -87,12 +94,18 @@ function ProductPage() {
       : product.categorySlug;
 
   function onAdd() {
+    if (!user) return requireLogin("/cart");
     add(product.id, variantId, qty);
     toast.success(`${product.name} added to cart`);
   }
   function onBuyNow() {
+    if (!user) return requireLogin("/checkout");
     add(product.id, variantId, qty);
     navigate({ to: "/checkout" });
+  }
+  function onToggleWish() {
+    if (!user) return requireLogin("/wishlist");
+    toggleWish(product.id);
   }
 
   return (
@@ -226,7 +239,7 @@ function ProductPage() {
               Buy Now
             </button>
             <button
-              onClick={() => toggleWish(product.id)}
+              onClick={onToggleWish}
               className="p-3 border border-border rounded-md hover:border-saffron"
             >
               <Heart className={"h-5 w-5 " + (wished ? "fill-saffron text-saffron" : "")} />

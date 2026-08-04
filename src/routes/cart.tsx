@@ -3,6 +3,7 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useCart } from "@/lib/cart-store";
+import { useRequireAuth } from "@/lib/use-require-auth";
 import { computeShipping, formatINR, FREE_SHIPPING_THRESHOLD } from "@/lib/format";
 import { api } from "@/lib/api";
 import type { Product } from "@/lib/types";
@@ -26,6 +27,7 @@ function CartPage() {
   const clearCoupon = useCart((s) => s.clearCoupon);
   const [couponInput, setCouponInput] = useState(coupon?.code ?? "");
   const [applying, setApplying] = useState(false);
+  const { ready } = useRequireAuth("/cart");
 
   const detailed = items
     .map((it) => {
@@ -54,6 +56,10 @@ function CartPage() {
     } finally {
       setApplying(false);
     }
+  }
+
+  if (!ready) {
+    return <div className="container-page py-20 text-center text-muted-foreground">Loading…</div>;
   }
 
   if (detailed.length === 0) {

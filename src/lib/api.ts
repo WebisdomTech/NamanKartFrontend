@@ -52,9 +52,12 @@ export const api = {
     }
   },
 
+  // The backend paginates /products (default 10 per page). Nothing in this
+  // app has page-through UI — every caller expects the full catalog — so
+  // request a high limit by default; callers can still override it.
   listProducts: async (params?: Record<string, string>): Promise<Product[]> => {
-    const query = params ? "?" + new URLSearchParams(params).toString() : "";
-    return fetchApi<Product[]>(`/products${query}`);
+    const query = new URLSearchParams({ limit: "100", ...params }).toString();
+    return fetchApi<Product[]>(`/products?${query}`);
   },
 
   getProduct: async (slug: string): Promise<Product | undefined> => {
@@ -66,7 +69,7 @@ export const api = {
   },
 
   productsByCategory: async (slug: string): Promise<Product[]> => {
-    return fetchApi<Product[]>(`/products?categorySlug=${slug}`);
+    return fetchApi<Product[]>(`/products?categorySlug=${slug}&limit=100`);
   },
 
   related: async (product: Product): Promise<Product[]> => {
@@ -79,7 +82,7 @@ export const api = {
 
   search: async (q: string): Promise<Product[]> => {
     if (!q.trim()) return [];
-    return fetchApi<Product[]>(`/products?q=${encodeURIComponent(q)}`);
+    return fetchApi<Product[]>(`/products?q=${encodeURIComponent(q)}&limit=100`);
   },
 
   createOrder: async (input: {

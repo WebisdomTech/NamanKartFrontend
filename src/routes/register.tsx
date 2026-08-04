@@ -2,12 +2,14 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { toast } from "sonner";
 import { z } from "zod";
+import { zodValidator, fallback } from "@tanstack/zod-adapter";
 import { useAuth } from "@/lib/auth-store";
 
 export const Route = createFileRoute("/register")({
   head: () => ({
     meta: [{ title: "Create Account — NamanKart" }, { name: "robots", content: "noindex" }],
   }),
+  validateSearch: zodValidator(z.object({ redirect: fallback(z.string(), "").default("") })),
   component: RegisterPage,
 });
 
@@ -23,6 +25,7 @@ const input =
 
 function RegisterPage() {
   const register = useAuth((s) => s.register);
+  const { redirect } = Route.useSearch();
   const navigate = useNavigate();
   const [form, setForm] = useState({ fullName: "", email: "", phone: "", password: "" });
   const [loading, setLoading] = useState(false);
@@ -43,7 +46,7 @@ function RegisterPage() {
         phone: parsed.data.phone || undefined,
       });
       toast.success("Account created!");
-      navigate({ to: "/account" });
+      navigate({ to: redirect || "/account" });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not create account");
     } finally {
@@ -94,7 +97,7 @@ function RegisterPage() {
       </form>
       <p className="text-sm text-muted-foreground mt-4">
         Already have an account?{" "}
-        <Link to="/login" className="text-saffron font-medium">
+        <Link to="/login" search={{ redirect }} className="text-saffron font-medium">
           Log in
         </Link>
       </p>
