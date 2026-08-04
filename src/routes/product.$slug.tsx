@@ -9,6 +9,7 @@ import { useAuth } from "@/lib/auth-store";
 import { formatINR } from "@/lib/format";
 import { api } from "@/lib/api";
 import type { Product, Variant } from "@/lib/types";
+import { hasContent } from "@/lib/cmsUtils";
 
 export const Route = createFileRoute("/product/$slug")({
   loader: async ({ params }) => {
@@ -282,14 +283,65 @@ function ProductPage() {
             </button>
           ))}
         </div>
-        <div className="py-6 text-sm leading-relaxed">
-          {tab === "details" && <p>{product.description || product.shortDescription}</p>}
+        <div className="py-6 text-sm leading-relaxed space-y-4">
+          {tab === "details" && (
+            <div className="space-y-4">
+              <p className="whitespace-pre-line">{product.description || product.shortDescription}</p>
+
+              {hasContent(product.overview) && (
+                <div className="p-3 bg-cream/50 rounded-md border border-border/50">
+                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">Overview</h4>
+                  <p className="text-xs text-muted-foreground whitespace-pre-line">{product.overview}</p>
+                </div>
+              )}
+
+              {hasContent(product.benefits) && (
+                <div className="p-3 bg-cream/50 rounded-md border border-border/50">
+                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">Key Benefits & Spiritual Virtues</h4>
+                  <p className="text-xs text-muted-foreground whitespace-pre-line">{product.benefits}</p>
+                </div>
+              )}
+
+              {hasContent(product.howToUse) && (
+                <div className="p-3 bg-cream/50 rounded-md border border-border/50">
+                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">How To Use & Ritual Guidance</h4>
+                  <p className="text-xs text-muted-foreground whitespace-pre-line">{product.howToUse}</p>
+                </div>
+              )}
+
+              {hasContent(product.careInstructions) && (
+                <div className="p-3 bg-cream/50 rounded-md border border-border/50">
+                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">Care Instructions</h4>
+                  <p className="text-xs text-muted-foreground whitespace-pre-line">{product.careInstructions}</p>
+                </div>
+              )}
+
+              {hasContent(product.spiritualSignificance) && (
+                <div className="p-3 bg-cream/50 rounded-md border border-border/50">
+                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">Spiritual Significance</h4>
+                  <p className="text-xs text-muted-foreground whitespace-pre-line">{product.spiritualSignificance}</p>
+                </div>
+              )}
+
+              {hasContent(product.packageContents) && (
+                <div className="p-3 bg-cream/50 rounded-md border border-border/50">
+                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">Package Contents</h4>
+                  <p className="text-xs text-muted-foreground">{product.packageContents}</p>
+                </div>
+              )}
+            </div>
+          )}
           {tab === "specs" && (
             <div className="space-y-3">
               <ul className="space-y-1">
                 <li>
                   <b>Category:</b> {catName}
                 </li>
+                {product.brand && (
+                  <li>
+                    <b>Brand:</b> {product.brand}
+                  </li>
+                )}
                 {product.material && (
                   <li>
                     <b>Material:</b> {product.material}
@@ -321,17 +373,17 @@ function ProductPage() {
                     <table className="w-full text-xs text-left">
                       <thead className="bg-cream border-b border-border">
                         <tr>
-                          <th className="p-2 font-bold">Specification</th>
-                          <th className="p-2 font-bold">Details</th>
+                          <th className="p-2.5 font-bold text-maroon">Specification</th>
+                          <th className="p-2.5 font-bold text-maroon">Details</th>
                         </tr>
                       </thead>
                       <tbody>
                         {product.specificationsTable.map((row: any, i: number) => (
                           <tr key={i} className="border-b border-border/50">
-                            <td className="p-2 font-medium">
+                            <td className="p-2.5 font-medium">
                               {row.key || row.attribute || `Spec ${i + 1}`}
                             </td>
-                            <td className="p-2 text-muted-foreground">
+                            <td className="p-2.5 text-muted-foreground">
                               {row.value || row.detail || String(row)}
                             </td>
                           </tr>
@@ -347,6 +399,11 @@ function ProductPage() {
               <p className="font-medium text-maroon">
                 {product.shippingDescription || "Standard PAN India Shipping & Delivery Policy"}
               </p>
+              {product.deliveryTimeline && (
+                <div className="text-xs p-2.5 bg-cream/70 rounded-md border border-saffron/20 font-medium text-maroon">
+                  🚚 Expected Timeline: {product.deliveryTimeline}
+                </div>
+              )}
               {Array.isArray(product.shippingPoints) && product.shippingPoints.length > 0 ? (
                 <ul className="space-y-1 text-xs">
                   {product.shippingPoints.map((pt: string, i: number) => (
@@ -365,33 +422,46 @@ function ProductPage() {
           )}
           {tab === "reviews" && (
             <div className="space-y-4">
-              {product.reviewHeading && (
-                <h4 className="font-semibold text-base text-maroon">{product.reviewHeading}</h4>
-              )}
-              {product.reviewDescription && (
-                <p className="text-xs text-muted-foreground">{product.reviewDescription}</p>
-              )}
+              <h4 className="font-semibold text-base text-maroon">
+                {product.reviewHeading || "Devotee Verification & Rating"}
+              </h4>
+              <p className="text-xs text-muted-foreground">
+                {product.reviewDescription || "Every item is temple-sourced and quality checked before dispatch."}
+              </p>
               {Array.isArray(product.reviewHighlights) && product.reviewHighlights.length > 0 && (
                 <div className="flex flex-wrap gap-2 my-2">
                   {product.reviewHighlights.map((hl: string, i: number) => (
                     <span
                       key={i}
-                      className="px-2 py-1 bg-cream text-saffron font-medium text-xs rounded-full border border-saffron/20"
+                      className="px-2.5 py-1 bg-cream text-saffron font-medium text-xs rounded-full border border-saffron/20"
                     >
                       ✓ {hl}
                     </span>
                   ))}
                 </div>
               )}
-              {!product.reviewHeading &&
-                !product.reviewDescription &&
-                (!product.reviewHighlights || product.reviewHighlights.length === 0) && (
-                  <p className="text-sm text-muted-foreground">No reviews yet for this product.</p>
-                )}
             </div>
           )}
         </div>
       </div>
+
+      {/* Product FAQs */}
+      {Array.isArray((product as any).faqs) && (product as any).faqs.length > 0 && (
+        <section className="mt-12 bg-cream/30 p-6 md:p-8 rounded-2xl border border-border">
+          <h2 className="font-display text-2xl text-maroon mb-6">Frequently Asked Questions</h2>
+          <div className="space-y-4">
+            {(product as any).faqs.map((faq: { question: string; answer: string }, idx: number) => (
+              <details key={idx} className="group border border-border/80 bg-background rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden">
+                <summary className="flex items-center justify-between font-semibold text-sm text-foreground cursor-pointer">
+                  <span>{faq.question}</span>
+                  <span className="ml-2 transition-transform group-open:rotate-180 text-saffron">↓</span>
+                </summary>
+                <p className="mt-3 text-xs md:text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Related */}
       {related.length > 0 && (
