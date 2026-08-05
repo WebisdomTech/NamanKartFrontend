@@ -165,6 +165,38 @@ export const api = {
   getMe: async (): Promise<AuthUser> => {
     return fetchApi("/auth/me");
   },
+
+  // Asks the backend to create a real Razorpay order for an existing order.
+  // The amount and key come from the server — never from the client.
+  createRazorpayOrder: async (
+    orderId: string,
+    email: string,
+  ): Promise<{
+    razorpayOrderId: string;
+    amount: number;
+    currency: string;
+    keyId: string;
+    paymentId: string;
+  }> => {
+    return fetchApi("/payments/razorpay/create-order", {
+      method: "POST",
+      body: JSON.stringify({ orderId, email }),
+    });
+  },
+
+  // Server-side HMAC signature verification. Only this call marks an order
+  // paid and deducts inventory — a client can't fake it.
+  verifyRazorpayPayment: async (input: {
+    razorpayOrderId: string;
+    razorpayPaymentId: string;
+    razorpaySignature: string;
+    email: string;
+  }): Promise<{ order: Order }> => {
+    return fetchApi("/payments/razorpay/verify", {
+      method: "POST",
+      body: JSON.stringify(input),
+    });
+  },
 };
 
 /**
@@ -197,10 +229,24 @@ function loadRazorpayScript(): Promise<boolean> {
   });
 }
 
+/**
+ * Opens the Razorpay checkout for a server-created Razorpay order.
+ *
+ * Everything security-relevant (amount, currency, order id, key) comes from
+ * the backend's /payments/razorpay/create-order response. The returned
+ * signature fields must then be sent to /payments/razorpay/verify — the
+ * payment is not trusted until the server verifies that HMAC.
+ */
 export async function startRazorpayPayment(
-  orderTotal: number,
+  rzpOrder: { razorpayOrderId: string; amount: number; currency: string; keyId: string },
   prefill?: { name?: string; email?: string; contact?: string },
-): Promise<{ paid: boolean; ref?: string; cancelled?: boolean }> {
+): Promise<{
+  paid: boolean;
+  cancelled?: boolean;
+  razorpayOrderId?: string;
+  razorpayPaymentId?: string;
+  razorpaySignature?: string;
+}> {
   const ok = await loadRazorpayScript();
   if (!ok || !window.Razorpay) {
     throw new Error("Could not load Razorpay. Check your internet connection.");
@@ -208,9 +254,10 @@ export async function startRazorpayPayment(
 
   return new Promise((resolve, reject) => {
     const rzp = new window.Razorpay!({
-      key: RAZORPAY_KEY_ID,
-      amount: Math.round(orderTotal * 100), // paise
-      currency: "INR",
+      key: rzpOrder.keyId,
+      order_id: rzpOrder.razorpayOrderId,
+      amount: rzpOrder.amount, // already in paise, server-issued
+      currency: rzpOrder.currency,
       name: "NamanKart",
       description: "Devotional products order",
       image: "/favicon.ico",
@@ -222,7 +269,12 @@ export async function startRazorpayPayment(
       notes: { source: "namankart-web" },
       theme: { color: "#C8102E" },
       handler: (resp: RazorpaySuccess) => {
-        resolve({ paid: true, ref: resp.razorpay_payment_id });
+        resolve({
+          paid: true,
+          razorpayOrderId: resp.razorpay_order_id ?? rzpOrder.razorpayOrderId,
+          razorpayPaymentId: resp.razorpay_payment_id,
+          razorpaySignature: resp.razorpay_signature,
+        });
       },
       modal: {
         ondismiss: () => resolve({ paid: false, cancelled: true }),

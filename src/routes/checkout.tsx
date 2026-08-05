@@ -24,17 +24,18 @@ const addressSchema = z.object({
   phone: z
     .string()
     .trim()
-    .regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit Indian mobile"),
-  line1: z.string().trim().min(5, "Enter your address").max(120),
+    .regex(/^[6-9]\d{9}$/, "Enter a valid 10-digit Indian mobile starting with 6, 7, 8, or 9"),
+  line1: z.string().trim().min(5, "Enter your street address").max(120),
   line2: z.string().trim().max(120).optional().or(z.literal("")),
-  city: z.string().trim().min(2).max(60),
-  state: z.string().trim().min(2).max(60),
+  landmark: z.string().trim().max(120).optional().or(z.literal("")),
+  city: z.string().trim().min(2, "Enter city").max(60),
+  state: z.string().trim().min(2, "Enter state").max(60),
   pincode: z
     .string()
     .trim()
-    .regex(/^\d{6}$/, "Enter a valid 6-digit PIN"),
+    .regex(/^\d{6}$/, "Enter a valid 6-digit PIN code"),
   country: z.literal("India"),
-  email: z.string().trim().email(),
+  email: z.string().trim().email("Enter a valid email address"),
 });
 
 function CheckoutPage() {
@@ -52,6 +53,7 @@ function CheckoutPage() {
     email: "",
     line1: "",
     line2: "",
+    landmark: "",
     city: "",
     state: "",
     pincode: "",
@@ -108,19 +110,9 @@ function CheckoutPage() {
     }
     setLoading(true);
     try {
-      if (paymentMethod === "razorpay") {
-        const res = await startRazorpayPayment(total, {
-          name: parsed.data.fullName,
-          email: parsed.data.email,
-          contact: parsed.data.phone,
-        });
-        if (res.cancelled) {
-          toast.message("Payment cancelled");
-          setLoading(false);
-          return;
-        }
-        if (!res.paid) throw new Error("Payment failed");
-      }
+      // 1. Create the order first. The server prices it, applies the coupon,
+      //    and reserves stock — for card payments it stays unpaid/reserved
+      //    until the signature is verified below.
       const order = await api.createOrder({
         items: detailed.map((x) => ({
           productId: x.p!.id,
@@ -134,6 +126,36 @@ function CheckoutPage() {
         paymentMethod,
         couponCode: coupon?.code,
       });
+
+      if (paymentMethod === "razorpay") {
+        // 2. Server creates the Razorpay order (amount + key come from it).
+        const rzpOrder = await api.createRazorpayOrder(order.id, parsed.data.email);
+
+        // 3. Collect payment.
+        const res = await startRazorpayPayment(rzpOrder, {
+          name: parsed.data.fullName,
+          email: parsed.data.email,
+          contact: parsed.data.phone,
+        });
+        if (res.cancelled) {
+          toast.message("Payment cancelled — your order is saved and unpaid.");
+          setLoading(false);
+          return;
+        }
+        if (!res.paid || !res.razorpayPaymentId || !res.razorpaySignature) {
+          throw new Error("Payment failed");
+        }
+
+        // 4. Server verifies the HMAC signature, marks the order paid and
+        //    deducts inventory. Until this succeeds nothing is confirmed.
+        await api.verifyRazorpayPayment({
+          razorpayOrderId: res.razorpayOrderId!,
+          razorpayPaymentId: res.razorpayPaymentId,
+          razorpaySignature: res.razorpaySignature,
+          email: parsed.data.email,
+        });
+      }
+
       clear();
       navigate({ to: "/order-confirmation", search: { id: order.id, email: parsed.data.email } });
     } catch (e) {
@@ -184,6 +206,12 @@ function CheckoutPage() {
                 placeholder="Address line 2 (optional)"
                 value={form.line2}
                 onChange={(e) => setForm({ ...form, line2: e.target.value })}
+              />
+              <input
+                className={input + " sm:col-span-2"}
+                placeholder="Landmark (optional - e.g. Near Temple / Opposite Bank)"
+                value={form.landmark}
+                onChange={(e) => setForm({ ...form, landmark: e.target.value })}
               />
               <input
                 className={input}
