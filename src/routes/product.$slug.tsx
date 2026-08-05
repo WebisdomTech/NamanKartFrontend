@@ -286,46 +286,70 @@ function ProductPage() {
         <div className="py-6 text-sm leading-relaxed space-y-4">
           {tab === "details" && (
             <div className="space-y-4">
-              <p className="whitespace-pre-line">{product.description || product.shortDescription}</p>
+              <p className="whitespace-pre-line">
+                {product.description || product.shortDescription}
+              </p>
 
               {hasContent(product.overview) && (
                 <div className="p-3 bg-cream/50 rounded-md border border-border/50">
-                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">Overview</h4>
-                  <p className="text-xs text-muted-foreground whitespace-pre-line">{product.overview}</p>
+                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">
+                    Overview
+                  </h4>
+                  <p className="text-xs text-muted-foreground whitespace-pre-line">
+                    {product.overview}
+                  </p>
                 </div>
               )}
 
               {hasContent(product.benefits) && (
                 <div className="p-3 bg-cream/50 rounded-md border border-border/50">
-                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">Key Benefits & Spiritual Virtues</h4>
-                  <p className="text-xs text-muted-foreground whitespace-pre-line">{product.benefits}</p>
+                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">
+                    Key Benefits & Spiritual Virtues
+                  </h4>
+                  <p className="text-xs text-muted-foreground whitespace-pre-line">
+                    {product.benefits}
+                  </p>
                 </div>
               )}
 
               {hasContent(product.howToUse) && (
                 <div className="p-3 bg-cream/50 rounded-md border border-border/50">
-                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">How To Use & Ritual Guidance</h4>
-                  <p className="text-xs text-muted-foreground whitespace-pre-line">{product.howToUse}</p>
+                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">
+                    How To Use & Ritual Guidance
+                  </h4>
+                  <p className="text-xs text-muted-foreground whitespace-pre-line">
+                    {product.howToUse}
+                  </p>
                 </div>
               )}
 
               {hasContent(product.careInstructions) && (
                 <div className="p-3 bg-cream/50 rounded-md border border-border/50">
-                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">Care Instructions</h4>
-                  <p className="text-xs text-muted-foreground whitespace-pre-line">{product.careInstructions}</p>
+                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">
+                    Care Instructions
+                  </h4>
+                  <p className="text-xs text-muted-foreground whitespace-pre-line">
+                    {product.careInstructions}
+                  </p>
                 </div>
               )}
 
               {hasContent(product.spiritualSignificance) && (
                 <div className="p-3 bg-cream/50 rounded-md border border-border/50">
-                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">Spiritual Significance</h4>
-                  <p className="text-xs text-muted-foreground whitespace-pre-line">{product.spiritualSignificance}</p>
+                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">
+                    Spiritual Significance
+                  </h4>
+                  <p className="text-xs text-muted-foreground whitespace-pre-line">
+                    {product.spiritualSignificance}
+                  </p>
                 </div>
               )}
 
               {hasContent(product.packageContents) && (
                 <div className="p-3 bg-cream/50 rounded-md border border-border/50">
-                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">Package Contents</h4>
+                  <h4 className="font-semibold text-maroon mb-1 text-xs uppercase tracking-wide">
+                    Package Contents
+                  </h4>
                   <p className="text-xs text-muted-foreground">{product.packageContents}</p>
                 </div>
               )}
@@ -426,7 +450,8 @@ function ProductPage() {
                 {product.reviewHeading || "Devotee Verification & Rating"}
               </h4>
               <p className="text-xs text-muted-foreground">
-                {product.reviewDescription || "Every item is temple-sourced and quality checked before dispatch."}
+                {product.reviewDescription ||
+                  "Every item is temple-sourced and quality checked before dispatch."}
               </p>
               {Array.isArray(product.reviewHighlights) && product.reviewHighlights.length > 0 && (
                 <div className="flex flex-wrap gap-2 my-2">
@@ -451,12 +476,19 @@ function ProductPage() {
           <h2 className="font-display text-2xl text-maroon mb-6">Frequently Asked Questions</h2>
           <div className="space-y-4">
             {(product as any).faqs.map((faq: { question: string; answer: string }, idx: number) => (
-              <details key={idx} className="group border border-border/80 bg-background rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden">
+              <details
+                key={idx}
+                className="group border border-border/80 bg-background rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden"
+              >
                 <summary className="flex items-center justify-between font-semibold text-sm text-foreground cursor-pointer">
                   <span>{faq.question}</span>
-                  <span className="ml-2 transition-transform group-open:rotate-180 text-saffron">↓</span>
+                  <span className="ml-2 transition-transform group-open:rotate-180 text-saffron">
+                    ↓
+                  </span>
                 </summary>
-                <p className="mt-3 text-xs md:text-sm text-muted-foreground leading-relaxed">{faq.answer}</p>
+                <p className="mt-3 text-xs md:text-sm text-muted-foreground leading-relaxed">
+                  {faq.answer}
+                </p>
               </details>
             ))}
           </div>

@@ -253,8 +253,7 @@ function CheckoutPage() {
                 <div>
                   <p className="font-medium text-sm">Razorpay — UPI / Cards / Net Banking</p>
                   <p className="text-xs text-muted-foreground">
-                    Secure online payment via Razorpay. Currently in TEST mode — use a Razorpay test
-                    card or UPI ID at checkout.
+                    Secure online payment via Razorpay.
                   </p>
                 </div>
               </label>

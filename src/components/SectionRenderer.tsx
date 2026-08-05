@@ -44,7 +44,11 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({ sections = [] 
       {visibleSections.map((section) => {
         switch (section.type) {
           case "hero": {
-            if (!hasContent(section.title) && !hasContent(section.subtitle) && !hasContent(section.data?.ctaText)) {
+            if (
+              !hasContent(section.title) &&
+              !hasContent(section.subtitle) &&
+              !hasContent(section.data?.ctaText)
+            ) {
               return null;
             }
             return (
@@ -84,26 +88,50 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({ sections = [] 
               return null;
             }
             return (
-              <div key={section.id} className="prose prose-amber max-w-none bg-white p-6 md:p-8 rounded-xl shadow-sm border border-amber-100">
-                {hasContent(section.title) && <h2 className="text-2xl font-serif font-bold text-gray-900 mb-4">{section.title}</h2>}
+              <div
+                key={section.id}
+                className="prose prose-amber max-w-none bg-white p-6 md:p-8 rounded-xl shadow-sm border border-amber-100"
+              >
+                {hasContent(section.title) && (
+                  <h2 className="text-2xl font-serif font-bold text-gray-900 mb-4">
+                    {section.title}
+                  </h2>
+                )}
                 {hasContent(bodyContent) && (
-                  <div className="text-gray-700 leading-relaxed space-y-4" dangerouslySetInnerHTML={{ __html: bodyContent }} />
+                  <div
+                    className="text-gray-700 leading-relaxed space-y-4"
+                    dangerouslySetInnerHTML={{ __html: bodyContent }}
+                  />
                 )}
               </div>
             );
           }
 
           case "trustStrip": {
-            const items = (section.data?.items || []).filter((item: any) => hasContent(item?.title) || hasContent(item?.description));
+            const items = (section.data?.items || []).filter(
+              (item: any) => hasContent(item?.title) || hasContent(item?.description),
+            );
             if (!hasContent(items)) return null;
             return (
-              <div key={section.id} className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-amber-50/70 border border-amber-200/60 rounded-2xl p-6">
+              <div
+                key={section.id}
+                className="grid grid-cols-2 md:grid-cols-4 gap-4 bg-amber-50/70 border border-amber-200/60 rounded-2xl p-6"
+              >
                 {items.map((item: any, idx: number) => (
-                  <div key={idx} className="flex items-center gap-3 p-3 bg-white/80 rounded-xl shadow-xs">
+                  <div
+                    key={idx}
+                    className="flex items-center gap-3 p-3 bg-white/80 rounded-xl shadow-xs"
+                  >
                     {hasContent(item.icon) && <span className="text-2xl">{item.icon}</span>}
                     <div>
-                      {hasContent(item.title) && <h4 className="font-semibold text-xs md:text-sm text-gray-900">{item.title}</h4>}
-                      {hasContent(item.description) && <p className="text-xs text-gray-500">{item.description}</p>}
+                      {hasContent(item.title) && (
+                        <h4 className="font-semibold text-xs md:text-sm text-gray-900">
+                          {item.title}
+                        </h4>
+                      )}
+                      {hasContent(item.description) && (
+                        <p className="text-xs text-gray-500">{item.description}</p>
+                      )}
                     </div>
                   </div>
                 ))}
@@ -112,14 +140,24 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({ sections = [] 
           }
 
           case "faq": {
-            const faqs = (section.data?.items || []).filter((faq: any) => hasContent(faq?.question) && hasContent(faq?.answer));
+            const faqs = (section.data?.items || []).filter(
+              (faq: any) => hasContent(faq?.question) && hasContent(faq?.answer),
+            );
             if (!hasContent(faqs)) return null;
             return (
-              <div key={section.id} className="bg-white p-6 md:p-8 rounded-2xl border border-amber-100 shadow-sm space-y-6">
-                {hasContent(section.title) && <h2 className="text-2xl font-serif font-bold text-gray-900">{section.title}</h2>}
+              <div
+                key={section.id}
+                className="bg-white p-6 md:p-8 rounded-2xl border border-amber-100 shadow-sm space-y-6"
+              >
+                {hasContent(section.title) && (
+                  <h2 className="text-2xl font-serif font-bold text-gray-900">{section.title}</h2>
+                )}
                 <div className="space-y-4">
                   {faqs.map((faq: any, idx: number) => (
-                    <details key={idx} className="group border border-amber-100 rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden bg-amber-50/30">
+                    <details
+                      key={idx}
+                      className="group border border-amber-100 rounded-xl p-4 [&_summary::-webkit-details-marker]:hidden bg-amber-50/30"
+                    >
                       <summary className="flex items-center justify-between font-semibold text-gray-900 cursor-pointer">
                         <span>{faq.question}</span>
                         <span className="ml-2 transition-transform group-open:rotate-180">↓</span>
@@ -133,11 +171,15 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({ sections = [] 
           }
 
           case "categoryGrid": {
-            const categories = (section.data?.items || []).filter((cat: any) => hasContent(cat?.name) || hasContent(cat?.title));
+            const categories = (section.data?.items || []).filter(
+              (cat: any) => hasContent(cat?.name) || hasContent(cat?.title),
+            );
             if (!hasContent(categories)) return null;
             return (
               <div key={section.id} className="space-y-6">
-                {hasContent(section.title) && <h2 className="text-2xl font-serif font-bold text-gray-900">{section.title}</h2>}
+                {hasContent(section.title) && (
+                  <h2 className="text-2xl font-serif font-bold text-gray-900">{section.title}</h2>
+                )}
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-4">
                   {categories.map((cat: any, idx: number) => (
                     <Link
@@ -145,9 +187,17 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({ sections = [] 
                       to={cat.url || `/categories/${cat.slug}`}
                       className="group flex flex-col items-center text-center p-4 bg-white hover:bg-amber-50/80 border border-amber-100 rounded-xl transition-all shadow-xs hover:shadow-md"
                     >
-                      <span className="text-3xl mb-2 group-hover:scale-110 transition-transform">{cat.emoji || "📿"}</span>
-                      <span className="font-semibold text-xs text-gray-900 line-clamp-1">{cat.name || cat.title}</span>
-                      {hasContent(cat.tileCopy) && <span className="text-[10px] text-gray-500 line-clamp-1 mt-1">{cat.tileCopy}</span>}
+                      <span className="text-3xl mb-2 group-hover:scale-110 transition-transform">
+                        {cat.emoji || "📿"}
+                      </span>
+                      <span className="font-semibold text-xs text-gray-900 line-clamp-1">
+                        {cat.name || cat.title}
+                      </span>
+                      {hasContent(cat.tileCopy) && (
+                        <span className="text-[10px] text-gray-500 line-clamp-1 mt-1">
+                          {cat.tileCopy}
+                        </span>
+                      )}
                     </Link>
                   ))}
                 </div>
@@ -157,21 +207,39 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({ sections = [] 
 
           case "buyingGuide":
           case "careGuide": {
-            const steps = (section.data?.items || []).filter((step: any) => hasContent(step?.title || step?.step) || hasContent(step?.text || step?.description));
+            const steps = (section.data?.items || []).filter(
+              (step: any) =>
+                hasContent(step?.title || step?.step) ||
+                hasContent(step?.text || step?.description),
+            );
             if (!hasContent(steps)) return null;
             return (
-              <div key={section.id} className="bg-amber-50/60 p-6 md:p-8 rounded-2xl border border-amber-200/80 space-y-6">
-                {hasContent(section.title) && <h2 className="text-2xl font-serif font-bold text-amber-950">{section.title}</h2>}
+              <div
+                key={section.id}
+                className="bg-amber-50/60 p-6 md:p-8 rounded-2xl border border-amber-200/80 space-y-6"
+              >
+                {hasContent(section.title) && (
+                  <h2 className="text-2xl font-serif font-bold text-amber-950">{section.title}</h2>
+                )}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {steps.map((step: any, idx: number) => (
-                    <div key={idx} className="bg-white p-5 rounded-xl border border-amber-100 shadow-xs flex items-start gap-4">
+                    <div
+                      key={idx}
+                      className="bg-white p-5 rounded-xl border border-amber-100 shadow-xs flex items-start gap-4"
+                    >
                       <span className="w-8 h-8 rounded-full bg-amber-500 text-white font-bold flex items-center justify-center shrink-0 text-sm">
                         {idx + 1}
                       </span>
                       <div>
-                        {hasContent(step.title || step.step) && <h4 className="font-bold text-sm text-gray-900">{step.title || step.step}</h4>}
+                        {hasContent(step.title || step.step) && (
+                          <h4 className="font-bold text-sm text-gray-900">
+                            {step.title || step.step}
+                          </h4>
+                        )}
                         {hasContent(step.text || step.description) && (
-                          <p className="text-xs text-gray-600 mt-1 leading-relaxed">{step.text || step.description}</p>
+                          <p className="text-xs text-gray-600 mt-1 leading-relaxed">
+                            {step.text || step.description}
+                          </p>
                         )}
                       </div>
                     </div>
@@ -182,13 +250,24 @@ export const SectionRenderer: React.FC<SectionRendererProps> = ({ sections = [] 
           }
 
           case "cta": {
-            if (!hasContent(section.title) && !hasContent(section.subtitle) && !hasContent(section.data?.ctaText)) {
+            if (
+              !hasContent(section.title) &&
+              !hasContent(section.subtitle) &&
+              !hasContent(section.data?.ctaText)
+            ) {
               return null;
             }
             return (
-              <div key={section.id} className="bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-2xl p-8 text-center space-y-4 shadow-lg">
-                {hasContent(section.title) && <h3 className="text-2xl md:text-3xl font-serif font-bold">{section.title}</h3>}
-                {hasContent(section.subtitle) && <p className="text-amber-100 text-sm max-w-xl mx-auto">{section.subtitle}</p>}
+              <div
+                key={section.id}
+                className="bg-gradient-to-r from-amber-600 to-amber-700 text-white rounded-2xl p-8 text-center space-y-4 shadow-lg"
+              >
+                {hasContent(section.title) && (
+                  <h3 className="text-2xl md:text-3xl font-serif font-bold">{section.title}</h3>
+                )}
+                {hasContent(section.subtitle) && (
+                  <p className="text-amber-100 text-sm max-w-xl mx-auto">{section.subtitle}</p>
+                )}
                 {hasContent(section.data?.ctaUrl) && (
                   <div>
                     <Link
