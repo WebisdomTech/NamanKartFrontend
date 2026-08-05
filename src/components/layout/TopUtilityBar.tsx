@@ -16,47 +16,52 @@ export function TopUtilityBar() {
         {/* Left Section: Phone, WhatsApp, Support Email, Sales Email */}
         <div className="flex items-center flex-wrap gap-3 sm:gap-4 text-white/95">
           <a
-            href="tel:+919000000000"
+            href="tel:+9193119 73199"
             className="flex items-center gap-1.5 hover:text-white hover:opacity-90 transition-all duration-200"
             title="Call Us"
           >
             <Phone className="h-4 w-4 shrink-0" />
-            <span>+91 90000 00000</span>
+            <span>+91 93119 73199</span>
           </a>
 
           <span className="h-4 w-px bg-white/30 hidden sm:inline-block" aria-hidden="true" />
 
           <a
-            href="https://wa.me/919000000000"
+            href="https://wa.me/918796973199"
             target="_blank"
             rel="noreferrer"
             className="flex items-center gap-1.5 hover:text-white hover:opacity-90 transition-all duration-200"
             title="WhatsApp Support"
           >
             <MessageCircle className="h-4 w-4 shrink-0" />
-            <span>+91 90000 00000</span>
+            <span>+91 87969 73199</span>
           </a>
 
           <span className="h-4 w-px bg-white/30 hidden md:inline-block" aria-hidden="true" />
 
           <a
-            href="mailto:support@namankart.com"
+            href="mailto:support@namandarshan.com"
             className="hidden md:flex items-center gap-1.5 hover:text-white hover:opacity-90 transition-all duration-200"
             title="Support & Grievance Email"
           >
             <Mail className="h-4 w-4 shrink-0" />
-            <span>support@namankart.com</span>
+            <span>For Grievance: support@namandarshan.com
+</span>
           </a>
 
           <span className="h-4 w-px bg-white/30 hidden lg:inline-block" aria-hidden="true" />
 
           <a
-            href="mailto:sales@namankart.com"
+            href="mailto:sales@namandarshan.com
+
+"
             className="hidden lg:flex items-center gap-1.5 hover:text-white hover:opacity-90 transition-all duration-200"
             title="Sales Email"
           >
             <Mail className="h-4 w-4 shrink-0" />
-            <span>sales@namankart.com</span>
+            <span>sales@namandarshan.com
+
+</span>
           </a>
         </div>
 

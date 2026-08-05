@@ -75,8 +75,8 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <a className="hover:text-saffron transition" href="tel:+919000000000">
-                +91 90000 00000
+              <a className="hover:text-saffron transition" href="tel:+91 87969 73199">
+                +91 87969 73199
               </a>
             </li>
           </ul>
