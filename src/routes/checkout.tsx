@@ -41,7 +41,7 @@ const addressSchema = z.object({
 function CheckoutPage() {
   const { products } = Route.useLoaderData() as { products: Product[] };
   const items = useCart((s) => s.items);
-  const clear = useCart((s) => s.clear);
+  const completePurchase = useCart((s) => s.completePurchase);
   const coupon = useCart((s) => s.coupon);
   const navigate = useNavigate();
   const { user, ready } = useRequireAuth("/checkout");
@@ -156,7 +156,9 @@ function CheckoutPage() {
         });
       }
 
-      clear();
+      // Only reached once payment is verified (or COD, which needs none):
+      // empty the cart and drop the just-bought items from the wishlist.
+      completePurchase(detailed.map((x) => x.p!.id));
       navigate({ to: "/order-confirmation", search: { id: order.id, email: parsed.data.email } });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not place order");

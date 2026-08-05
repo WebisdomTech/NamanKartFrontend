@@ -70,8 +70,8 @@ export function Footer() {
               </Link>
             </li>
             <li>
-              <a className="hover:text-saffron transition" href="mailto:care@namankart.com">
-                care@namankart.com
+              <a className="hover:text-saffron transition" href="mailto:support@namandarshan.com">
+                support@namandarshan.com
               </a>
             </li>
             <li>

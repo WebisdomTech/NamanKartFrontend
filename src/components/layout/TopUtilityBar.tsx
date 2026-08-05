@@ -12,11 +12,11 @@ import {
 export function TopUtilityBar() {
   return (
     <div className="bg-saffron text-white text-xs sm:text-sm font-medium border-b border-white/10 shadow-xs">
-      <div className="container-page flex flex-wrap items-center justify-between py-2.5 sm:py-3 gap-y-1.5">
+      <div className="container-page flex flex-wrap items-center justify-between py-1.5 sm:py-2 gap-y-1">
         {/* Left Section: Phone, WhatsApp, Support Email, Sales Email */}
         <div className="flex items-center flex-wrap gap-3 sm:gap-4 text-white/95">
           <a
-            href="tel:+9193119 73199"
+            href="tel:+919311973199"
             className="flex items-center gap-1.5 hover:text-white hover:opacity-90 transition-all duration-200"
             title="Call Us"
           >
@@ -45,23 +45,18 @@ export function TopUtilityBar() {
             title="Support & Grievance Email"
           >
             <Mail className="h-4 w-4 shrink-0" />
-            <span>For Grievance: support@namandarshan.com
-</span>
+            <span>For Grievance: support@namandarshan.com</span>
           </a>
 
           <span className="h-4 w-px bg-white/30 hidden lg:inline-block" aria-hidden="true" />
 
           <a
-            href="mailto:sales@namandarshan.com
-
-"
+            href="mailto:sales@namandarshan.com"
             className="hidden lg:flex items-center gap-1.5 hover:text-white hover:opacity-90 transition-all duration-200"
             title="Sales Email"
           >
             <Mail className="h-4 w-4 shrink-0" />
-            <span>sales@namandarshan.com
-
-</span>
+            <span>sales@namandarshan.com</span>
           </a>
         </div>
 
@@ -98,7 +93,7 @@ export function TopUtilityBar() {
               aria-label="LinkedIn"
               className="p-1 hover:text-white hover:scale-115 transition-all duration-200"
             >
-              <Linkedin className="h-4.5 w-4.5" />
+              <Linkedin className="h-4 w-4" />
             </a>
             <a
               href="https://instagram.com"
@@ -107,7 +102,7 @@ export function TopUtilityBar() {
               aria-label="Instagram"
               className="p-1 hover:text-white hover:scale-115 transition-all duration-200"
             >
-              <Instagram className="h-4.5 w-4.5" />
+              <Instagram className="h-4 w-4" />
             </a>
             <a
               href="https://facebook.com"
@@ -116,7 +111,7 @@ export function TopUtilityBar() {
               aria-label="Facebook"
               className="p-1 hover:text-white hover:scale-115 transition-all duration-200"
             >
-              <Facebook className="h-4.5 w-4.5" />
+              <Facebook className="h-4 w-4" />
             </a>
             <a
               href="https://youtube.com"
@@ -125,7 +120,7 @@ export function TopUtilityBar() {
               aria-label="YouTube"
               className="p-1 hover:text-white hover:scale-115 transition-all duration-200"
             >
-              <Youtube className="h-4.5 w-4.5" />
+              <Youtube className="h-4 w-4" />
             </a>
           </div>
         </div>

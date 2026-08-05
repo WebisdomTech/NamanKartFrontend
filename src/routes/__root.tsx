@@ -4,6 +4,7 @@ import {
   Link,
   createRootRouteWithContext,
   useRouter,
+  useLocation,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
@@ -146,11 +147,29 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   );
 }
 
+function RouteTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      (window as any).dataLayer = (window as any).dataLayer || [];
+      (window as any).dataLayer.push({
+        event: "page_view",
+        page_path: location.pathname,
+        page_title: document.title,
+      });
+    }
+  }, [location.pathname]);
+
+  return null;
+}
+
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
 
   return (
     <QueryClientProvider client={queryClient}>
+      <RouteTracker />
       <div className="flex min-h-screen flex-col">
         <Header />
         <main className="flex-1">

@@ -83,7 +83,7 @@ export function HeroCarousel({ slides = DEFAULT_BANNERS }: { slides?: BannerSlid
           {slides.map((slide, index) => (
             <div
               key={slide.id}
-              className="relative flex-[0_0_100%] min-w-0 min-h-[380px] sm:min-h-[460px] md:min-h-[520px] lg:min-h-[560px] flex items-center"
+              className="relative flex-[0_0_100%] min-w-0 min-h-[310px] sm:min-h-[360px] md:min-h-[400px] lg:min-h-[450px] flex items-center"
             >
               {/* Image Container */}
               <div className="absolute inset-0">
@@ -102,7 +102,7 @@ export function HeroCarousel({ slides = DEFAULT_BANNERS }: { slides?: BannerSlid
               </div>
 
               {/* Banner Text Content */}
-              <div className="container-page relative z-10 py-10 sm:py-16 md:py-20 lg:py-24 text-white">
+              <div className="container-page relative z-10 py-6 sm:py-10 md:py-12 lg:py-14 text-white">
                 <div className="max-w-xl lg:max-w-2xl text-left">
                   <h1 className="font-display text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white drop-shadow-md leading-tight">
                     {slide.heading}

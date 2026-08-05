@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { api } from "./api";
+import { useCart } from "./cart-store";
 import type { AuthUser } from "./types";
 
 const TOKEN_KEY = "nk_user_token";
@@ -28,17 +29,23 @@ export const useAuth = create<AuthState>()(
       login: async (email, password) => {
         const { user, accessToken } = await api.login({ email, password });
         localStorage.setItem(TOKEN_KEY, accessToken);
+        useCart.getState().claimForUser(user.email);
         set({ user, status: "ready" });
       },
 
       register: async (input) => {
         const { user, tokens } = await api.register(input);
         localStorage.setItem(TOKEN_KEY, tokens.accessToken);
+        useCart.getState().claimForUser(user.email);
         set({ user, status: "ready" });
       },
 
       logout: () => {
         localStorage.removeItem(TOKEN_KEY);
+        // Basket state is persisted per browser, not per account — clear it
+        // so the next person signing in on this device doesn't inherit the
+        // previous user's cart and wishlist.
+        useCart.getState().resetForNewSession();
         set({ user: null, status: "ready" });
       },
 
@@ -52,6 +59,7 @@ export const useAuth = create<AuthState>()(
         }
         try {
           const user = await api.getMe();
+          useCart.getState().claimForUser(user.email);
           set({ user, status: "ready" });
         } catch {
           localStorage.removeItem(TOKEN_KEY);
