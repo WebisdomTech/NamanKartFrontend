@@ -166,6 +166,27 @@ export const api = {
     return fetchApi("/auth/me");
   },
 
+  // Always resolves with the same generic message whether or not the address
+  // is registered — the backend deliberately gives nothing away, so the UI
+  // must not branch on the result either.
+  forgotPassword: async (email: string): Promise<{ message: string }> => {
+    return fetchApi("/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+    });
+  },
+
+  // `resetToken` comes from the ?token= query param on the emailed link.
+  resetPassword: async (input: {
+    resetToken: string;
+    newPassword: string;
+  }): Promise<{ message: string }> => {
+    return fetchApi("/auth/reset-password", {
+      method: "POST",
+      body: JSON.stringify(input),
+    });
+  },
+
   // Asks the backend to create a real Razorpay order for an existing order.
   // The amount and key come from the server — never from the client.
   createRazorpayOrder: async (

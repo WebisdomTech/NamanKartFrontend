@@ -75,6 +75,11 @@ function LoginPage() {
         </button>
       </form>
       <p className="text-sm text-muted-foreground mt-4">
+        <Link to="/forgot-password" className="text-saffron font-medium">
+          Forgot your password?
+        </Link>
+      </p>
+      <p className="text-sm text-muted-foreground mt-2">
         New to NamanKart?{" "}
         <Link to="/register" search={{ redirect }} className="text-saffron font-medium">
           Create an account

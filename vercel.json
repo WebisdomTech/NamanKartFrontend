@@ -8,6 +8,11 @@
     {
       "source": "/robots.txt",
       "destination": "https://namankartbackend.onrender.com/robots.txt"
+    },
+    {
+      "source": "/((?!api/.*).*)",
+      "destination": "/index.html"
     }
   ]
 }
+
